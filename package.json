@@ -1,0 +1,22 @@
+{
+  "name": "acey-deucey-game-engine",
+  "version": "0.1.0",
+  "description": "a game engine for the backgammon variant acey deucey",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/KatherineThompson/acey-deucey-game-engine.git"
+  },
+  "keywords": [
+    "game"
+  ],
+  "author": "Katherine Thompson ket29@cornell.edu",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/KatherineThompson/acey-deucey-game-engine/issues"
+  },
+  "homepage": "https://github.com/KatherineThompson/acey-deucey-game-engine#readme"
+}
