@@ -1,4 +1,4 @@
-"use strict"
+"use strict";
 
 const test = require("tape");
 
@@ -43,6 +43,6 @@ test("getInitialGameState", t => {
             barPieces: 0,
             winningPieces:0
         }      
-    }
+    };
     t.deepEqual(getInitialGameState(), gameState, "returns the correct gameState object");
 });
