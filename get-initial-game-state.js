@@ -5,6 +5,7 @@ const _ = require("lodash");
 function getInitialGameState() {
     const gameState = {
         board: [],
+        isPlayerOne: true,
         playerOne: {
             initialPieces: 15,
             barPieces: 0,
@@ -14,7 +15,7 @@ function getInitialGameState() {
             initialPieces: 15,
             barPieces: 0,
             winningPieces:0
-        }             
+        },             
     };
     
     gameState.board = _(24).range().map(() => ({isPlayerOne: null, numPieces: 0})).value();

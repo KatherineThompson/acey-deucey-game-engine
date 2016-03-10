@@ -33,6 +33,7 @@ test("getInitialGameState", t => {
             {isPlayerOne: null, numPieces: 0},
             {isPlayerOne: null, numPieces: 0}
         ],
+        isPlayerOne: true,
         playerOne: {
             initialPieces: 15,
             barPieces: 0,
