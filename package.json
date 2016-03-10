@@ -4,7 +4,7 @@
   "description": "a game engine for the backgammon variant acey deucey",
   "main": "index.js",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "test": "tape test.js | tap-difflet"
   },
   "repository": {
     "type": "git",
@@ -18,5 +18,9 @@
   "bugs": {
     "url": "https://github.com/KatherineThompson/acey-deucey-game-engine/issues"
   },
-  "homepage": "https://github.com/KatherineThompson/acey-deucey-game-engine#readme"
+  "homepage": "https://github.com/KatherineThompson/acey-deucey-game-engine#readme",
+  "devDependencies": {
+    "tap-difflet": "^0.4.0",
+    "tape": "^4.5.1"
+  }
 }
