@@ -23,5 +23,8 @@
     "jshint": "^2.9.1",
     "tap-difflet": "^0.4.0",
     "tape": "^4.5.1"
+  },
+  "dependencies": {
+    "lodash": "^4.6.1"
   }
 }

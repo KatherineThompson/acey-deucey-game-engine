@@ -1,5 +1,7 @@
 "use strict";
 
+const _ = require("lodash");
+
 function getInitialGameState() {
     const gameState = {
         board: [],
@@ -15,9 +17,7 @@ function getInitialGameState() {
         }             
     };
     
-    for (let i = 0; i < 24; i++){
-        gameState.board.push({isPlayerOne: null, numPieces: 0});
-    }
+    gameState.board = _(24).range().map(() => ({isPlayerOne: null, numPieces: 0})).value();
     
     return gameState;
 }
