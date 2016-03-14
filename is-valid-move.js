@@ -7,16 +7,16 @@ function isValidMove(gameState, proposedMove) {
     const isPlayerOne = gameState.isPlayerOne;
     const proposedBoardSpace = gameState.board[proposedSpace];
     const currentBoardSpace = gameState.board[proposedMove.currentPosition];
-     
     const activePlayer = isPlayerOne ? gameState.playerOne : gameState.playerTwo;
     
     function canMoveOffBoard() {
-        if (isPlayerOne && gameState.playerOne.initialPieces === 0 && gameState.playerOne.barPieces === 0) {
-            return _(17).range().every(num => gameState.board[num].isPlayerOne !== isPlayerOne);
-        } else if (gameState.playerTwo.initialPieces === 0 && gameState.playerTwo.barPieces === 0){
-            return _(24).range().drop(6).every(num => gameState.board[num].isPlayerOne !== isPlayerOne);
+        if (activePlayer.initialPieces === 0 && activePlayer.barPieces === 0) {
+            if (isPlayerOne) {
+                return _(17).range().every(num => gameState.board[num].isPlayerOne !== isPlayerOne);
+            } else {
+                return _(24).range().drop(6).every(num => gameState.board[num].isPlayerOne !== isPlayerOne);
+            }
         }
-        
         return false;
     }
     
