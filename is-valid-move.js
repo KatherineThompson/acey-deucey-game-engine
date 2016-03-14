@@ -12,9 +12,9 @@ function isValidMove(gameState, proposedMove) {
     function canMoveOffBoard() {
         if (activePlayer.initialPieces === 0 && activePlayer.barPieces === 0) {
             if (isPlayerOne) {
-                return _(17).range().every(num => gameState.board[num].isPlayerOne !== isPlayerOne);
+                return _(gameState.board).dropRight(6).every(space => space.isPlayerOne !== isPlayerOne);
             } else {
-                return _(24).range().drop(6).every(num => gameState.board[num].isPlayerOne !== isPlayerOne);
+                return _(gameState.board).drop(6).every(space => space.isPlayerOne !== isPlayerOne);
             }
         }
         return false;
