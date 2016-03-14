@@ -31,18 +31,8 @@ function isValidMove(gameState, proposedMove) {
     }
     
     // checks whether the player is trying to move pieces off the board and if that is allowed
-    if (isPlayerOne && proposedSpace > 23) {
-        if (canMoveOffBoard()) {
-            return true;
-        } else {
-            return false;
-        }
-    } else if (!isPlayerOne && proposedSpace < 0) {
-        if (canMoveOffBoard()) {
-            return true;
-        } else {
-            return false;
-        }
+    if ((isPlayerOne && proposedSpace > 23) || (!isPlayerOne && proposedSpace < 0)) {
+        return canMoveOffBoard();
     }
     
     // checks whether the space is already occupied by the current player, is empty, or is occupied by only 1 piece of the opposing player
