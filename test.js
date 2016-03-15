@@ -692,5 +692,55 @@ test("makeMove", t => {
                 "the correct game state is returned when player 2 moves to a space with one of player 1's pieces"
             );
         });    
+    });
+    
+    t.test("moving off the bar", t => {
+        t.test("player 1", t => {
+            t.plan(1);
+           
+            const moveOffBar = {
+               currentPosition: -1,
+               numberOfSpaces: 5,
+               isBar: true
+            };
+            
+            const oldGameState = getInitialGameState();
+            oldGameState.playerOne.barPieces = 1;
+            
+            const newGameState = getInitialGameState();
+            newGameState.isPlayerOne = false;
+            newGameState.board[4].isPlayerOne = true;
+            newGameState.board[4].numPieces = 1;
+            
+            t.deepEqual(
+                makeMove(oldGameState, moveOffBar),
+                newGameState,
+                "the correct game state is returned when player 1 moves a piece off the bar"
+            );    
+       });
+       
+        t.test("player 2", t => {
+            t.plan(1);
+            
+            const moveOffBar = {
+                currentPosition: 24,
+                numberOfSpaces: 5,
+                isBar: true    
+            };
+            
+            const oldGameState = getInitialGameState();
+            oldGameState.isPlayerOne = false;
+            oldGameState.playerTwo.barPieces = 1;
+            
+            const newGameState = getInitialGameState();
+            newGameState.board[19].isPlayerOne = false;
+            newGameState.board[19].numPieces = 1;
+            
+            t.deepEqual(
+                makeMove(oldGameState, moveOffBar),
+                newGameState,
+                "the correct game state is returned when player 2 moves a piece off the bar"
+            ); 
+       }); 
     });  
 });

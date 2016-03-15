@@ -15,7 +15,7 @@ function makeMove(oldGameState, proposedMove) {
         const playerName = isPlayerOne ? "playerOne" : "playerTwo";
         
         if (isMovingOnBoard) {
-            newGameState[playerName].initialPieces--;
+            proposedMove.isBar ? (newGameState[playerName].barPieces--) : (newGameState[playerName].initialPieces--);
         } else {
             const oldSpace = newGameState.board[oldPosition];
             oldSpace.numPieces--;
