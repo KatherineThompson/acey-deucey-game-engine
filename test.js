@@ -406,6 +406,7 @@ test("makeMove", t => {
                 const newGameState = getInitialGameState();
                 newGameState.board[13].isPlayerOne = true;
                 newGameState.board[13].numPieces = 1;
+                newGameState.isPlayerOne = false;
                 
                 t.deepEqual(
                     makeMove(oldGameState, moveToEmptySpace),
@@ -425,6 +426,7 @@ test("makeMove", t => {
                 newGameState.board[10].numPieces = 1;
                 newGameState.board[13].isPlayerOne = true;
                 newGameState.board[13].numPieces = 1;
+                newGameState.isPlayerOne = false;
                 
                 t.deepEqual(
                     makeMove(oldGameState, moveToEmptySpace),
@@ -444,7 +446,6 @@ test("makeMove", t => {
                 oldGameState.board[10].numPieces = 1;
                 
                 const newGameState = getInitialGameState();
-                newGameState.isPlayerOne = false;
                 newGameState.board[7].isPlayerOne = false;
                 newGameState.board[7].numPieces = 1;
                 
@@ -463,7 +464,6 @@ test("makeMove", t => {
                 oldGameState.isPlayerOne = false;
                 
                 const newGameState = getInitialGameState();
-                newGameState.isPlayerOne = false;
                 newGameState.board[10].isPlayerOne = false;
                 newGameState.board[10].numPieces = 1;
                 newGameState.board[7].isPlayerOne = false;
@@ -476,6 +476,169 @@ test("makeMove", t => {
                     "from a space with 2 pieces to an empty space"
                 );
             });
+        });
+    });
+    
+    t.test("moving to the player's own space", t => {
+        const moveToOwnSpace = {
+            currentPosition: 13,
+            numberOfSpaces: 6,
+            isBar: false
+        };
+        t.test("player 1", t => {
+            t.plan(1);
+            
+            const oldGameState = getInitialGameState();
+            oldGameState.board[13].isPlayerOne = true;
+            oldGameState.board[13].numPieces = 1;
+            oldGameState.board[19].isPlayerOne = true;
+            oldGameState.board[19].numPieces = 1;
+            
+            const newGameState = getInitialGameState();
+            newGameState.isPlayerOne = false;
+            newGameState.board[19].isPlayerOne = true;
+            newGameState.board[19].numPieces = 2;
+            
+            t.deepEqual(
+                makeMove(oldGameState, moveToOwnSpace),
+                newGameState,
+                "the correct game state is returned when player 1 moves to a space occupied by their piece"
+            );            
+        });
+        
+        t.test("player 2", t => {
+            t.plan(1);
+            
+            const oldGameState = getInitialGameState();
+            oldGameState.isPlayerOne = false;
+            oldGameState.board[13].isPlayerOne = false;
+            oldGameState.board[13].numPieces = 1;
+            oldGameState.board[7].isPlayerOne = false;
+            oldGameState.board[7].numPieces = 1;
+            
+            const newGameState = getInitialGameState();
+            newGameState.board[7].isPlayerOne = false;
+            newGameState.board[7].numPieces = 2;
+            
+            t.deepEqual(
+                makeMove(oldGameState, moveToOwnSpace),
+                newGameState,
+                "the correct game state is returned when player 2 moves to a space occupied by their piece"
+            );
+        });        
+    });
+    
+    t.test("moving on the board", t => {
+       t.test("player 1", t => {
+          t.plan(1);
+          
+          const moveOnBoard = {
+            currentPosition: -1,
+            numberOfSpaces: 4,
+            isBar: false    
+          };
+          
+          const oldGameState = getInitialGameState();
+          
+          const newGameState = getInitialGameState();
+          newGameState.isPlayerOne = false;
+          newGameState.playerOne.initialPieces = 14;
+          newGameState.board[3].isPlayerOne = true;
+          newGameState.board[3].numPieces = 1;
+          
+          t.deepEqual(
+              makeMove(oldGameState, moveOnBoard),
+              newGameState,
+              "the correct game state is returned when player one moves a piece onto the board"
+          ); 
+       });
+       
+       t.test("player 2", t => {
+           t.plan(1);
+           
+            const moveOnBoard = {
+                currentPosition: 24,
+                numberOfSpaces: 4,
+                isBar: false    
+            };
+            
+            const oldGameState = getInitialGameState();
+            oldGameState.isPlayerOne = false;
+            
+            const newGameState = getInitialGameState();
+            newGameState.playerTwo.initialPieces = 14;
+            newGameState.board[20].isPlayerOne = false;
+            newGameState.board[20].numPieces = 1;
+            
+            t.deepEqual(
+                makeMove(oldGameState, moveOnBoard),
+                newGameState,
+                "the correct game state is returned when player 2 moves a piece onto the board"
+            ); 
+       }); 
+    });
+    
+    t.test("moving off the board", t => {
+        t.test("player 1", t => {
+            t.plan(1);
+            
+            const moveOffBoard = {
+                currentPosition: 22,
+                numberOfSpaces: 3,
+                isBar: false
+            };
+            
+            const oldGameState = getInitialGameState();
+            oldGameState.board[22].isPlayerOne = true;
+            oldGameState.board[22].numPieces = 1;
+            oldGameState.board[20].isPlayerOne = true;
+            oldGameState.board[20].numPieces = 2;
+            oldGameState.playerOne.winningPieces = 12;
+            oldGameState.playerOne.initialPieces = 0;
+            
+            const newGameState = getInitialGameState();
+            newGameState.isPlayerOne = false;
+            newGameState.board[20].isPlayerOne = true;
+            newGameState.board[20].numPieces = 2;
+            newGameState.playerOne.winningPieces = 13;
+            newGameState.playerOne.initialPieces = 0;
+            
+            t.deepEqual(
+                makeMove(oldGameState, moveOffBoard),
+                newGameState,
+                "the correct game state is returned when player 1 move a piece off the board"
+            );
+        });
+        
+        t.test("player 2", t => {
+            t.plan(1);
+            
+            const moveOffBoard = {
+                currentPosition: 1,
+                numberOfSpaces: 3,
+                isBar: false    
+            };
+            
+            const oldGameState = getInitialGameState();
+            oldGameState.isPlayerOne = false;
+            oldGameState.board[1].isPlayerOne = false;
+            oldGameState.board[1].numPieces = 1;
+            oldGameState.board[3].isPlayerOne = false;
+            oldGameState.board[3].numPieces = 2;
+            oldGameState.playerTwo.initialPieces = 0;
+            oldGameState.playerTwo.winningPieces = 12;
+            
+            const newGameState = getInitialGameState();
+            newGameState.board[3].isPlayerOne = false;
+            newGameState.board[3].numPieces = 2;
+            newGameState.playerTwo.initialPieces = 0;
+            newGameState.playerTwo.winningPieces = 13;
+            
+            t.deepEqual(
+                makeMove(oldGameState, moveOffBoard),
+                newGameState,
+                "the correct game state is returned when player 2 moves a piece off the board"
+            );         
         });
     });  
 });

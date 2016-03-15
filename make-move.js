@@ -4,25 +4,41 @@ const isValidMove = require("./is-valid-move");
 function makeMove(oldGameState, proposedMove) {
    
     if (isValidMove(oldGameState, proposedMove)) {
+        
         const newGameState = copyGameState(oldGameState);
         const oldPosition = proposedMove.currentPosition;
-        const oldSpace = newGameState.board[oldPosition];
+        const isPlayerOne = newGameState.isPlayerOne;
         const newPosition = oldPosition + proposedMove.numberOfSpaces * (newGameState.isPlayerOne ? 1 : -1);
         const newSpace = newGameState.board[newPosition];
+        const isMovingOnBoard = (oldPosition < 0 && isPlayerOne) || (oldPosition > 23 &! isPlayerOne);
+        const isMovingOffBoard = (newPosition > 23 && isPlayerOne) || (newPosition < 0 &! isPlayerOne);
         
-        oldSpace.numPieces--;
-        if (oldSpace.numPieces === 0) {
-            oldSpace.isPlayerOne = null;
+        if (isMovingOnBoard) {
+            const playerName = isPlayerOne ? "playerOne" : "playerTwo";
+            newGameState[playerName].initialPieces--;
+        } else {
+            const oldSpace = newGameState.board[oldPosition];
+            oldSpace.numPieces--;
+            if (oldSpace.numPieces === 0) {
+                oldSpace.isPlayerOne = null;
+            }
         }
         
-        if (newSpace.isPlayerOne !== newGameState.isPlayerOne) {
+        if (isMovingOffBoard) {
+            const playerName = isPlayerOne ? "playerOne" : "playerTwo";
+            newGameState[playerName].winningPieces++;
+        } else if (newSpace.isPlayerOne !== newGameState.isPlayerOne) {
             newSpace.isPlayerOne = newGameState.isPlayerOne;
             newSpace.numPieces = 1;
         } else {
             newSpace.numPieces++;
         }
+        
+        newGameState.isPlayerOne = !oldGameState.isPlayerOne;
+        
         console.log(oldGameState);
         console.log(newGameState);
+        
         return newGameState;
     }
 }
