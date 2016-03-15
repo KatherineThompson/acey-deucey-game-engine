@@ -12,9 +12,9 @@ function makeMove(oldGameState, proposedMove) {
         const newSpace = newGameState.board[newPosition];
         const isMovingOnBoard = (oldPosition < 0 && isPlayerOne) || (oldPosition > 23 &! isPlayerOne);
         const isMovingOffBoard = (newPosition > 23 && isPlayerOne) || (newPosition < 0 &! isPlayerOne);
+        const playerName = isPlayerOne ? "playerOne" : "playerTwo";
         
         if (isMovingOnBoard) {
-            const playerName = isPlayerOne ? "playerOne" : "playerTwo";
             newGameState[playerName].initialPieces--;
         } else {
             const oldSpace = newGameState.board[oldPosition];
@@ -25,10 +25,14 @@ function makeMove(oldGameState, proposedMove) {
         }
         
         if (isMovingOffBoard) {
-            const playerName = isPlayerOne ? "playerOne" : "playerTwo";
             newGameState[playerName].winningPieces++;
-        } else if (newSpace.isPlayerOne !== newGameState.isPlayerOne) {
-            newSpace.isPlayerOne = newGameState.isPlayerOne;
+        } else if (newSpace.isPlayerOne !== isPlayerOne) {
+            if (newSpace.isPlayerOne === !isPlayerOne) {
+                const opposingPlayerName = isPlayerOne ? "playerTwo" : "playerOne";
+                newGameState[opposingPlayerName].barPieces++;   
+            }
+            
+            newSpace.isPlayerOne = isPlayerOne;
             newSpace.numPieces = 1;
         } else {
             newSpace.numPieces++;

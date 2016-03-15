@@ -640,5 +640,57 @@ test("makeMove", t => {
                 "the correct game state is returned when player 2 moves a piece off the board"
             );         
         });
+    });
+    
+    t.test("moving to the other player's space", t => {
+        const moveToOpposingSpace = {
+            currentPosition: 16,
+            numberOfSpaces: 2,
+            isBar: false
+        };
+        
+        t.test("player 1", t => {
+            t.plan(1);
+            
+            const oldGameState = getInitialGameState();
+            oldGameState.board[16].isPlayerOne = true;
+            oldGameState.board[16].numPieces = 1;
+            oldGameState.board[18].isPlayerOne = false;
+            oldGameState.board[18].numPieces = 1;
+            
+            const newGameState = getInitialGameState();
+            newGameState.isPlayerOne = false;
+            newGameState.board[18].isPlayerOne = true;
+            newGameState.board[18].numPieces = 1;
+            newGameState.playerTwo.barPieces = 1;
+            
+            t.deepEqual(
+                makeMove(oldGameState, moveToOpposingSpace),
+                newGameState,
+                "the correct game state is returned when player 1 moves to a space with one of player 2's pieces"
+            );
+        });
+        
+        t.test("player 2", t => {
+            t.plan(1);
+            
+            const oldGameState = getInitialGameState();
+            oldGameState.isPlayerOne = false;
+            oldGameState.board[16].isPlayerOne = false;
+            oldGameState.board[16].numPieces = 1;
+            oldGameState.board[14].isPlayerOne = true;
+            oldGameState.board[14].numPieces = 1;
+            
+            const newGameState = getInitialGameState();
+            newGameState.board[14].isPlayerOne = false;
+            newGameState.board[14].numPieces = 1;
+            newGameState.playerOne.barPieces = 1;
+            
+            t.deepEqual(
+                makeMove(oldGameState, moveToOpposingSpace),
+                newGameState,
+                "the correct game state is returned when player 2 moves to a space with one of player 1's pieces"
+            );
+        });    
     });  
 });
