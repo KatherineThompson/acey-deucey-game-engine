@@ -384,3 +384,98 @@ test("isValidMove", t => {
         });
     });           
 });
+
+const makeMove = require("./make-move");
+
+test("makeMove", t => {
+    
+    t.test("moving to an empty space", t => {
+        const moveToEmptySpace = {
+            currentPosition: 10,
+            numberOfSpaces: 3,
+            isBar: false
+        };
+        
+        t.test("player 1", t => { 
+            t.test("moving from space with 1 piece", t => {
+                t.plan(1);
+                const oldGameState = getInitialGameState();
+                oldGameState.board[10].isPlayerOne = true;
+                oldGameState.board[10].numPieces = 1;
+                
+                const newGameState = getInitialGameState();
+                newGameState.board[13].isPlayerOne = true;
+                newGameState.board[13].numPieces = 1;
+                
+                t.deepEqual(
+                    makeMove(oldGameState, moveToEmptySpace),
+                    newGameState,
+                    "the correct game state is returned when player 1 moves from a space with 1 piece to an empty space"
+                );
+        });          
+            
+            t.test("moving from space with 2 pieces", t => {
+                t.plan(1);
+                const oldGameState = getInitialGameState();
+                oldGameState.board[10].isPlayerOne = true;
+                oldGameState.board[10].numPieces = 2;
+                
+                const newGameState = getInitialGameState();
+                newGameState.board[10].isPlayerOne = true;
+                newGameState.board[10].numPieces = 1;
+                newGameState.board[13].isPlayerOne = true;
+                newGameState.board[13].numPieces = 1;
+                
+                t.deepEqual(
+                    makeMove(oldGameState, moveToEmptySpace),
+                    newGameState,
+                    "the correct game state is returned when player 1 moves" + 
+                    "from a space with 2 pieces to an empty space"
+                );
+            });
+        });
+        
+        t.test("player 2", t => { 
+            t.test("moving from space with 1 piece", t => {
+                t.plan(1);
+                const oldGameState = getInitialGameState();
+                oldGameState.isPlayerOne = false;
+                oldGameState.board[10].isPlayerOne = false;
+                oldGameState.board[10].numPieces = 1;
+                
+                const newGameState = getInitialGameState();
+                newGameState.isPlayerOne = false;
+                newGameState.board[7].isPlayerOne = false;
+                newGameState.board[7].numPieces = 1;
+                
+                t.deepEqual(
+                    makeMove(oldGameState, moveToEmptySpace),
+                    newGameState,
+                    "the correct game state is returned when player 2 moves from a space with 1 piece to an empty space"
+                );
+            });          
+            
+            t.test("moving from space with 2 pieces", t => {
+                t.plan(1);
+                const oldGameState = getInitialGameState();
+                oldGameState.board[10].isPlayerOne = false;
+                oldGameState.board[10].numPieces = 2;
+                oldGameState.isPlayerOne = false;
+                
+                const newGameState = getInitialGameState();
+                newGameState.isPlayerOne = false;
+                newGameState.board[10].isPlayerOne = false;
+                newGameState.board[10].numPieces = 1;
+                newGameState.board[7].isPlayerOne = false;
+                newGameState.board[7].numPieces = 1;
+                
+                t.deepEqual(
+                    makeMove(oldGameState, moveToEmptySpace),
+                    newGameState,
+                    "the correct game state is returned when player 2 moves" + 
+                    "from a space with 2 pieces to an empty space"
+                );
+            });
+        });
+    });  
+});
