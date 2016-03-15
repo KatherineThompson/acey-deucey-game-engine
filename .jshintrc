@@ -16,6 +16,7 @@
     "trailing"      : true,
     "expr"          : true,
     "validthis"     : true,
+    "maxlen"        : 120,
 
     "node"          : true,
     "esnext"        : true
