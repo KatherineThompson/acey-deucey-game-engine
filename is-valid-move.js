@@ -33,6 +33,13 @@ function isValidMove(gameState, proposedMove) {
         return canMoveOffBoard();
     }
     
+    const isMovingOnBoard = (proposedMove.currentPosition < 0 && isPlayerOne) ||
+        (proposedMove.currentPosition > 23 && !isPlayerOne);
+        
+    if (isMovingOnBoard && (!activePlayer.initialPieces && !activePlayer.barPieces)) {
+        return false;
+    }
+    
     if (
         isPlayerOne === proposedBoardSpace.isPlayerOne ||
         proposedBoardSpace.isPlayerOne === null ||

@@ -54,7 +54,7 @@ test("isValidMove", t => {
 
     t.test("moving onto the board", t => {
         t.test("player 1", t => {
-            t.plan(1);
+            t.plan(2);
             
             const gameState = getInitialGameState(); 
             const proposedFirstMove = {
@@ -68,10 +68,18 @@ test("isValidMove", t => {
                 true, 
                 "the move is valid when player 1 moves a piece onto an empty board"
             );
+            
+            gameState.playerOne.initialPieces = 0;
+            
+            t.equal(
+                isValidMove(gameState, proposedFirstMove),
+                false,
+                "the move is invalid when there are no remaining initial pieces off the board"  
+            );
         });
         
         t.test("player 2", t => {
-            t.plan(1);
+            t.plan(2);
             
             const gameState = getInitialGameState();
             gameState.isPlayerOne = false;
@@ -86,6 +94,14 @@ test("isValidMove", t => {
                 isValidMove(gameState, proposedFirstMove),
                 true,
                 "the move is valid when player 2 move a piece onto an empty board"
+            );
+            
+            gameState.playerTwo.initialPieces = 0;
+            
+            t.equal(
+                isValidMove(gameState, proposedFirstMove),
+                false,
+                "the move is invalid when there are no remaining initial pieces on the board"
             );            
         });
     }); 
@@ -305,7 +321,8 @@ test("isValidMove", t => {
             
             const gameState = getInitialGameState();
             gameState.playerOne.barPieces = 1;
-            gameState.board[11].isPlayerOne = true;    
+            gameState.board[11].isPlayerOne = true;
+            gameState.playerOne.initialPieces = 0;    
             
             const proposedMoveFromBar = {
                 currentPosition: -1,
@@ -333,6 +350,7 @@ test("isValidMove", t => {
             gameState.isPlayerOne = false;
             gameState.playerTwo.barPieces = 1;
             gameState.board[11].isPlayerOne = false;
+            gameState.playerTwo.initialPieces = 0;
             
             const proposedMoveFromBar = {
                 currentPosition: 24,
