@@ -468,7 +468,7 @@ test("makeMove", t => {
                     makeMove(oldGameState, moveToEmptySpace),
                     newGameState,
                     "the correct game state is returned when player 1 moves" + 
-                    "from a space with 2 pieces to an empty space"
+                        "from a space with 2 pieces to an empty space"
                 );
             });
         });
