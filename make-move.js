@@ -50,32 +50,4 @@ function makeMove(oldGameState, proposedMove) {
     return newGameState;
 }
 
-function copyGameState(oldGameState) {
-    return {
-        board: copyBoard(oldGameState.board),
-        isPlayerOne: oldGameState.isPlayerOne,
-        playerOne: {
-            initialPieces: oldGameState.playerOne.initialPieces,
-            barPieces: oldGameState.playerOne.barPieces,
-            winningPieces: oldGameState.playerOne.winningPieces
-        },
-        playerTwo: {
-            initialPieces: oldGameState.playerTwo.initialPieces,
-            barPieces: oldGameState.playerTwo.barPieces,
-            winningPieces: oldGameState.playerTwo.winningPieces
-        }
-    };
-}
-
-function copyBoard(originalBoard) {
-    const newBoard = [];
-    originalBoard.forEach(function(space) {
-        newBoard.push({
-            isPlayerOne: space.isPlayerOne,
-            numPieces: space.numPieces
-        });
-    })
-    return newBoard;
-}
-
 module.exports = makeMove;
