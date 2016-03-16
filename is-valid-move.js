@@ -1,7 +1,7 @@
 "use strict";
 
 const _ = require("lodash");
-
+// check initialPieces and winningPieces
 function isValidMove(gameState, proposedMove) {
     const proposedSpace = proposedMove.currentPosition + proposedMove.numberOfSpaces * (gameState.isPlayerOne ? 1 : -1);
     const isPlayerOne = gameState.isPlayerOne;
