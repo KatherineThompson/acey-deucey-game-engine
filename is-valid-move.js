@@ -36,7 +36,7 @@ function isValidMove(gameState, proposedMove) {
     const isMovingOnBoard = (proposedMove.currentPosition < 0 && isPlayerOne) ||
         (proposedMove.currentPosition > 23 && !isPlayerOne);
         
-    if (isMovingOnBoard && (!activePlayer.initialPieces && !activePlayer.barPieces)) {
+    if (isMovingOnBoard && !activePlayer.initialPieces && !activePlayer.barPieces) {
         return false;
     }
     
