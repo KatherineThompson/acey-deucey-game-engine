@@ -6,7 +6,7 @@ const getInitialGameState = aceyDeuceyGameEngine.getInitialGameState;
 
 const isValidTurn = aceyDeuceyGameEngine.isValidTurn;
 
-test("isValidTurn", t => {
+test.only("isValidTurn", t => {
     t.test("moving one piece", t => {
         t.test("player 1", t => {
             t.plan(1);
@@ -47,7 +47,7 @@ test("isValidTurn", t => {
             t.equal(
                 isValidTurn(gameState, diceRoll, proposedTwoDiceMove),
                 true,
-                "the move is valid when player two moves one piece twice"
+                "the move is valid when player 2 moves one piece twice"
             );
         });
     });

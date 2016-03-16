@@ -45,6 +45,8 @@ function makeMove(oldGameState, proposedMove) {
         newSpace.numPieces++;
     }
     
+    // tech debt: need to create a new function to make turn since there are multiple moves in a turn and it doesn't 
+    // make sense to change players after each move
     newGameState.isPlayerOne = !oldGameState.isPlayerOne;
     
     return newGameState;

@@ -3,25 +3,37 @@ const isValidMove = require("./is-valid-move");
 const makeMove = require("./make-move");
 
 function isValidTurn(gameState, diceRoll, proposedMoves) {
-    function doDiceMatchMoves() {
+    function proposedMovesMatchDice() {
         const sortedDice = diceRoll.sort();
         const numSpaces = [];
         proposedMoves.forEach(function(move) {
-           numSpaces.push(move.numSpaces); 
+           numSpaces.push(move.numberOfSpaces); 
         });
         numSpaces.sort();
         
         return sortedDice.every((num, index) => num === numSpaces[index]);
     }
-
-    if (doDiceMatchMoves()){
-        let newGameState = gameState;
-        return proposedMoves.every(move => {
-            isValidMove(newGameState, move);
-            newGameState = makeMove(newGameState, move);
-        });
+    
+    function proposedMovesAreValid(gameState, proposedMoves) {
+        if (!proposedMoves.length) {
+            return true;
+        }
+        
+        const firstMove = proposedMoves[0];
+        
+        if (!isValidMove(gameState, firstMove)) {
+            return false;
+        }
+        
+        const newProposedMoves = proposedMoves.slice(1);
+        const newGameState = makeMove(gameState, firstMove);
+        newGameState.isPlayerOne = !newGameState.isPlayerOne;
+        
+        return proposedMovesAreValid(newGameState, newProposedMoves);
+        
     }
-    return false;
+    
+    return proposedMovesMatchDice() && proposedMovesAreValid(gameState, proposedMoves);
 }
 
 module.exports = isValidTurn;
