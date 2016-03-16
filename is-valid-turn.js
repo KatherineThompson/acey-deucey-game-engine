@@ -1,5 +1,6 @@
 "use strict";
 const isValidMove = require("./is-valid-move");
+const makeMove = require("./make-move");
 
 function isValidTurn(gameState, diceRoll, proposedMoves) {
     function doDiceMatchMoves() {

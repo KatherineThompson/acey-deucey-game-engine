@@ -2,5 +2,7 @@
 
 module.exports = {
     getInitialGameState: require("./get-initial-game-state"),
-    isValidTurn: require("./is-valid-turn")
+    isValidTurn: require("./is-valid-turn"),
+    isValidMove: require("./is-valid-move"),
+    makeMove: require("./make-move")
 };
