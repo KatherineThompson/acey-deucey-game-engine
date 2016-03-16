@@ -1,8 +1,8 @@
 "use strict";
 
 const test = require("tape");
-
-const getInitialGameState = require("./").getInitialGameState;
+const aceyDeuceyGameEngine = require("./").getInitialGameState;
+const getInitialGameState = aceyDeuceyGameEngine.getInitialGameState;
 
 test("getInitialGameState", t => {
     t.plan(1);
@@ -48,7 +48,7 @@ test("getInitialGameState", t => {
     t.deepEqual(getInitialGameState(), gameState, "returns the correct gameState object");
 });
 
-const isValidMove = require("./").isValidMove;
+const isValidMove = aceyDeuceyGameEngine.isValidMove;
 
 test("isValidMove", t => {
 
@@ -109,15 +109,15 @@ test("isValidMove", t => {
     t.test("moving off the board", t => {
         t.test("player 1", t => {
             t.plan(3);
-            
-            const gameState = getInitialGameState();
-            gameState.board[22].isPlayerOne = true;
-            
+
             const proposedMoveOffBoard = {
                 currentPosition: 22,
                 numberOfSpaces: 4,
                 isBar: false    
             };
+                        
+            const gameState = getInitialGameState();
+            gameState.board[proposedMoveOffBoard.currentPosition].isPlayerOne = true;
             
             t.equal(
                 isValidMove(gameState, proposedMoveOffBoard),
@@ -145,16 +145,18 @@ test("isValidMove", t => {
         
         t.test("player 2", t => {
             t.plan(3);
-            
-            const gameState = getInitialGameState();
-            gameState.board[2].isPlayerOne = false;
-            gameState.isPlayerOne = false;
-            
+         
             const proposedMoveOffBoard = {
                 currentPosition: 2,
                 numberOfSpaces: 4,
                 isBar: false    
             };
+            
+            const gameState = getInitialGameState();
+            gameState.board[proposedMoveOffBoard.currentPosition].isPlayerOne = false;
+            gameState.isPlayerOne = false;
+            
+
             t.equal(
                 isValidMove(gameState, proposedMoveOffBoard),
                 false,
@@ -193,7 +195,7 @@ test("isValidMove", t => {
             t.plan(1);
             
             const gameState = getInitialGameState();
-            gameState.board[5].isPlayerOne = true;
+            gameState.board[proposedMoveToEmptySpace.currentPosition].isPlayerOne = true;
             
             t.equal(
                 isValidMove(gameState, proposedMoveToEmptySpace),
@@ -207,7 +209,7 @@ test("isValidMove", t => {
             
             const gameState = getInitialGameState();
             gameState.isPlayerOne = false;
-            gameState.board[5].isPlayerOne = false;
+            gameState.board[proposedMoveToEmptySpace.currentPosition].isPlayerOne = false;
             
             t.equal(
                 isValidMove(gameState, proposedMoveToEmptySpace),
@@ -228,8 +230,10 @@ test("isValidMove", t => {
             t.plan(1);
             
             const gameState = getInitialGameState();
-            gameState.board[10].isPlayerOne = true;
-            gameState.board[12].isPlayerOne = true;
+            gameState.board[proposedMoveToOwnSpace.currentPosition].isPlayerOne = true;
+            gameState.board[
+                proposedMoveToOwnSpace.currentPosition + proposedMoveToOwnSpace.numberOfSpaces
+            ].isPlayerOne = true;
             
             t.equal(
                 isValidMove(gameState, proposedMoveToOwnSpace),
@@ -243,8 +247,10 @@ test("isValidMove", t => {
            
             const gameState = getInitialGameState();
             gameState.isPlayerOne = false;
-            gameState.board[10].isPlayerOne = false;
-            gameState.board[8].isPlayerOne = false;
+            gameState.board[proposedMoveToOwnSpace.currentPosition].isPlayerOne = false;
+            gameState.board[
+                proposedMoveToOwnSpace.currentPosition - proposedMoveToOwnSpace.numberOfSpaces
+            ].isPlayerOne = false;
             
             t.equal(
                 isValidMove(gameState, proposedMoveToOwnSpace),
@@ -265,9 +271,13 @@ test("isValidMove", t => {
             t.plan(2);
             
             const gameState = getInitialGameState();
-            gameState.board[16].isPlayerOne = true;
-            gameState.board[20].isPlayerOne = false;
-            gameState.board[20].numPieces = 1;            
+            gameState.board[proposedMoveToOpposingSpace.currentPosition].isPlayerOne = true;
+            gameState.board[
+                proposedMoveToOpposingSpace.currentPosition + proposedMoveToOpposingSpace.numberOfSpaces
+            ].isPlayerOne = false;
+            gameState.board[
+                proposedMoveToOpposingSpace.currentPosition + proposedMoveToOpposingSpace.numberOfSpaces
+            ].numPieces = 1;            
             
             t.equal(
                 isValidMove(gameState, proposedMoveToOpposingSpace),
@@ -275,7 +285,9 @@ test("isValidMove", t => {
                 "the move is valid when player 1 moves to a space with one of player 2's pieces"
             );
             
-            gameState.board[20].numPieces = 3;
+            gameState.board[
+                proposedMoveToOpposingSpace.currentPosition + proposedMoveToOpposingSpace.numberOfSpaces
+            ].numPieces = 3;
             
             t.equal(
                 isValidMove(gameState, proposedMoveToOpposingSpace),
@@ -289,9 +301,13 @@ test("isValidMove", t => {
             
             const gameState = getInitialGameState();
             gameState.isPlayerOne = false;
-            gameState.board[16].isPlayerOne = false;
-            gameState.board[12].isPlayerOne = true;
-            gameState.board[12].numPieces = 1;
+            gameState.board[proposedMoveToOpposingSpace.currentPosition].isPlayerOne = false;
+            gameState.board[
+                proposedMoveToOpposingSpace.currentPosition - proposedMoveToOpposingSpace.numberOfSpaces
+            ].isPlayerOne = true;
+            gameState.board[
+                proposedMoveToOpposingSpace.currentPosition - proposedMoveToOpposingSpace.numberOfSpaces
+            ].numPieces = 1;
 
             t.equal(
                 isValidMove(gameState, proposedMoveToOpposingSpace),
@@ -299,7 +315,9 @@ test("isValidMove", t => {
                 "the move is valid when player 2 moves to a space with one of player 1's pieces"
             ); 
             
-            gameState.board[12].numPieces = 3;
+            gameState.board[
+                proposedMoveToOpposingSpace.currentPosition - proposedMoveToOpposingSpace.numberOfSpaces
+            ].numPieces = 3;
             
             t.equal(
                 isValidMove(gameState, proposedMoveToOpposingSpace),
@@ -321,7 +339,7 @@ test("isValidMove", t => {
             
             const gameState = getInitialGameState();
             gameState.playerOne.barPieces = 1;
-            gameState.board[11].isPlayerOne = true;
+            gameState.board[proposedMoveNotFromBar.currentPosition].isPlayerOne = true;
             gameState.playerOne.initialPieces = 0;    
             
             const proposedMoveFromBar = {
@@ -349,7 +367,7 @@ test("isValidMove", t => {
             const gameState = getInitialGameState();
             gameState.isPlayerOne = false;
             gameState.playerTwo.barPieces = 1;
-            gameState.board[11].isPlayerOne = false;
+            gameState.board[proposedMoveNotFromBar.currentPosition].isPlayerOne = false;
             gameState.playerTwo.initialPieces = 0;
             
             const proposedMoveFromBar = {
@@ -403,7 +421,7 @@ test("isValidMove", t => {
     });           
 });
 
-const makeMove = require("./").makeMove;
+const makeMove = aceyDeuceyGameEngine.makeMove;
 
 test("makeMove", t => {
     
@@ -418,8 +436,8 @@ test("makeMove", t => {
             t.test("moving from space with 1 piece", t => {
                 t.plan(1);
                 const oldGameState = getInitialGameState();
-                oldGameState.board[10].isPlayerOne = true;
-                oldGameState.board[10].numPieces = 1;
+                oldGameState.board[moveToEmptySpace.currentPosition].isPlayerOne = true;
+                oldGameState.board[moveToEmptySpace.currentPosition].numPieces = 1;
                 
                 const newGameState = getInitialGameState();
                 newGameState.board[13].isPlayerOne = true;
@@ -436,8 +454,8 @@ test("makeMove", t => {
             t.test("moving from space with 2 pieces", t => {
                 t.plan(1);
                 const oldGameState = getInitialGameState();
-                oldGameState.board[10].isPlayerOne = true;
-                oldGameState.board[10].numPieces = 2;
+                oldGameState.board[moveToEmptySpace.currentPosition].isPlayerOne = true;
+                oldGameState.board[moveToEmptySpace.currentPosition].numPieces = 2;
                 
                 const newGameState = getInitialGameState();
                 newGameState.board[10].isPlayerOne = true;
@@ -460,8 +478,8 @@ test("makeMove", t => {
                 t.plan(1);
                 const oldGameState = getInitialGameState();
                 oldGameState.isPlayerOne = false;
-                oldGameState.board[10].isPlayerOne = false;
-                oldGameState.board[10].numPieces = 1;
+                oldGameState.board[moveToEmptySpace.currentPosition].isPlayerOne = false;
+                oldGameState.board[moveToEmptySpace.currentPosition].numPieces = 1;
                 
                 const newGameState = getInitialGameState();
                 newGameState.board[7].isPlayerOne = false;
@@ -477,8 +495,8 @@ test("makeMove", t => {
             t.test("moving from space with 2 pieces", t => {
                 t.plan(1);
                 const oldGameState = getInitialGameState();
-                oldGameState.board[10].isPlayerOne = false;
-                oldGameState.board[10].numPieces = 2;
+                oldGameState.board[moveToEmptySpace.currentPosition].isPlayerOne = false;
+                oldGameState.board[moveToEmptySpace.currentPosition].numPieces = 2;
                 oldGameState.isPlayerOne = false;
                 
                 const newGameState = getInitialGameState();
@@ -491,7 +509,7 @@ test("makeMove", t => {
                     makeMove(oldGameState, moveToEmptySpace),
                     newGameState,
                     "the correct game state is returned when player 2 moves" + 
-                    "from a space with 2 pieces to an empty space"
+                        "from a space with 2 pieces to an empty space"
                 );
             });
         });
@@ -507,10 +525,14 @@ test("makeMove", t => {
             t.plan(1);
             
             const oldGameState = getInitialGameState();
-            oldGameState.board[13].isPlayerOne = true;
-            oldGameState.board[13].numPieces = 1;
-            oldGameState.board[19].isPlayerOne = true;
-            oldGameState.board[19].numPieces = 1;
+            oldGameState.board[moveToOwnSpace.currentPosition].isPlayerOne = true;
+            oldGameState.board[moveToOwnSpace.currentPosition].numPieces = 1;
+            oldGameState.board[
+                moveToOwnSpace.currentPosition + moveToOwnSpace.numberOfSpaces
+            ].isPlayerOne = true;
+            oldGameState.board[
+                moveToOwnSpace.currentPosition + moveToOwnSpace.numberOfSpaces
+            ].numPieces = 1;
             
             const newGameState = getInitialGameState();
             newGameState.isPlayerOne = false;
@@ -529,10 +551,14 @@ test("makeMove", t => {
             
             const oldGameState = getInitialGameState();
             oldGameState.isPlayerOne = false;
-            oldGameState.board[13].isPlayerOne = false;
-            oldGameState.board[13].numPieces = 1;
-            oldGameState.board[7].isPlayerOne = false;
-            oldGameState.board[7].numPieces = 1;
+            oldGameState.board[moveToOwnSpace.currentPosition].isPlayerOne = false;
+            oldGameState.board[moveToOwnSpace.currentPosition].numPieces = 1;
+            oldGameState.board[
+                moveToOwnSpace.currentPosition - moveToOwnSpace.numberOfSpaces
+            ].isPlayerOne = false;
+            oldGameState.board[
+                moveToOwnSpace.currentPosition - moveToOwnSpace.numberOfSpaces
+            ].numPieces = 1;
             
             const newGameState = getInitialGameState();
             newGameState.board[7].isPlayerOne = false;
@@ -607,8 +633,8 @@ test("makeMove", t => {
             };
             
             const oldGameState = getInitialGameState();
-            oldGameState.board[22].isPlayerOne = true;
-            oldGameState.board[22].numPieces = 1;
+            oldGameState.board[moveOffBoard.currentPosition].isPlayerOne = true;
+            oldGameState.board[moveOffBoard.currentPosition].numPieces = 1;
             oldGameState.board[20].isPlayerOne = true;
             oldGameState.board[20].numPieces = 2;
             oldGameState.playerOne.winningPieces = 12;
@@ -639,8 +665,8 @@ test("makeMove", t => {
             
             const oldGameState = getInitialGameState();
             oldGameState.isPlayerOne = false;
-            oldGameState.board[1].isPlayerOne = false;
-            oldGameState.board[1].numPieces = 1;
+            oldGameState.board[moveOffBoard.currentPosition].isPlayerOne = false;
+            oldGameState.board[moveOffBoard.currentPosition].numPieces = 1;
             oldGameState.board[3].isPlayerOne = false;
             oldGameState.board[3].numPieces = 2;
             oldGameState.playerTwo.initialPieces = 0;
@@ -671,10 +697,14 @@ test("makeMove", t => {
             t.plan(1);
             
             const oldGameState = getInitialGameState();
-            oldGameState.board[16].isPlayerOne = true;
-            oldGameState.board[16].numPieces = 1;
-            oldGameState.board[18].isPlayerOne = false;
-            oldGameState.board[18].numPieces = 1;
+            oldGameState.board[moveToOpposingSpace.currentPosition].isPlayerOne = true;
+            oldGameState.board[moveToOpposingSpace.currentPosition].numPieces = 1;
+            oldGameState.board[
+                moveToOpposingSpace.currentPosition + moveToOpposingSpace.numberOfSpaces
+            ].isPlayerOne = false;
+            oldGameState.board[
+                moveToOpposingSpace.currentPosition + moveToOpposingSpace.numberOfSpaces
+            ].numPieces = 1;
             
             const newGameState = getInitialGameState();
             newGameState.isPlayerOne = false;
@@ -694,10 +724,14 @@ test("makeMove", t => {
             
             const oldGameState = getInitialGameState();
             oldGameState.isPlayerOne = false;
-            oldGameState.board[16].isPlayerOne = false;
-            oldGameState.board[16].numPieces = 1;
-            oldGameState.board[14].isPlayerOne = true;
-            oldGameState.board[14].numPieces = 1;
+            oldGameState.board[moveToOpposingSpace.currentPosition].isPlayerOne = false;
+            oldGameState.board[moveToOpposingSpace.currentPosition].numPieces = 1;
+            oldGameState.board[
+                moveToOpposingSpace.currentPosition - moveToOpposingSpace.numberOfSpaces
+            ].isPlayerOne = true;
+            oldGameState.board[
+                moveToOpposingSpace.currentPosition - moveToOpposingSpace.numberOfSpaces
+            ].numPieces = 1;
             
             const newGameState = getInitialGameState();
             newGameState.board[14].isPlayerOne = false;
