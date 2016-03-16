@@ -1,7 +1,7 @@
 "use strict";
 
 const test = require("tape");
-
+// change require to use index
 const getInitialGameState = require("./get-initial-game-state");
 
 test("getInitialGameState", t => {
@@ -413,7 +413,7 @@ test("makeMove", t => {
                     newGameState,
                     "the correct game state is returned when player 1 moves from a space with 1 piece to an empty space"
                 );
-        });          
+            });          
             
             t.test("moving from space with 2 pieces", t => {
                 t.plan(1);
@@ -742,5 +742,28 @@ test("makeMove", t => {
                 "the correct game state is returned when player 2 moves a piece off the bar"
             ); 
        }); 
+    });
+    
+    t.test("throws an error", t => {
+       t.plan(2);
+       
+       const invalidMove = {
+          currentPosition: 12,
+          numberOfSpaces: 2,
+          isBar: false 
+       };
+       
+       const oldGameState = getInitialGameState();
+       
+       try {
+           makeMove(oldGameState, invalidMove);
+           t.fail("makeMove should have thrown an error for an invalid move");
+       } catch (error) {
+           t.equal(error.proposedMove, invalidMove, "error.proposedMove is the same as the invalid move");
+           t.equal(error.gameState, oldGameState, "error.gameState is the same as the gameState");
+       }
+        
     });  
 });
+
+// test to check whether oldGameState is changed after it's called
