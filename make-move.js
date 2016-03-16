@@ -1,6 +1,8 @@
 "use strict";
 const isValidMove = require("./is-valid-move");
 
+const _ = require("lodash");
+
 function makeMove(oldGameState, proposedMove) {
    
     if (!isValidMove(oldGameState, proposedMove)) {
@@ -10,19 +12,17 @@ function makeMove(oldGameState, proposedMove) {
         throw err;
     }
      
-    // look at _.cloneDeep
-    const newGameState = copyGameState(oldGameState);
+    const newGameState = _.cloneDeep(oldGameState);
     const oldPosition = proposedMove.currentPosition;
     const isPlayerOne = newGameState.isPlayerOne;
     const newPosition = oldPosition + proposedMove.numberOfSpaces * (newGameState.isPlayerOne ? 1 : -1);
     const newSpace = newGameState.board[newPosition];
     const isMovingOnBoard = (oldPosition < 0 && isPlayerOne) || (oldPosition > 23 &! isPlayerOne);
     const isMovingOffBoard = (newPosition > 23 && isPlayerOne) || (newPosition < 0 &! isPlayerOne);
-    // pull out whole active player
-    const playerName = isPlayerOne ? "playerOne" : "playerTwo";
+    const activePlayer = isPlayerOne ? newGameState.playerOne : newGameState.playerTwo;
     
     if (isMovingOnBoard) {
-        proposedMove.isBar ? (newGameState[playerName].barPieces--) : (newGameState[playerName].initialPieces--);
+        proposedMove.isBar ? (activePlayer.barPieces--) : (activePlayer.initialPieces--);
     } else {
         const oldSpace = newGameState.board[oldPosition];
         oldSpace.numPieces--;
@@ -32,7 +32,7 @@ function makeMove(oldGameState, proposedMove) {
     }
     
     if (isMovingOffBoard) {
-        newGameState[playerName].winningPieces++;
+        activePlayer.winningPieces++;
     } else if (newSpace.isPlayerOne !== isPlayerOne) {
         if (newSpace.isPlayerOne === !isPlayerOne) {
             const opposingPlayerName = isPlayerOne ? "playerTwo" : "playerOne";

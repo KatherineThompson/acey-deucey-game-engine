@@ -1,8 +1,8 @@
 "use strict";
 
 const test = require("tape");
-// change require to use index
-const getInitialGameState = require("./get-initial-game-state");
+
+const getInitialGameState = require("./").getInitialGameState;
 
 test("getInitialGameState", t => {
     t.plan(1);
@@ -48,7 +48,7 @@ test("getInitialGameState", t => {
     t.deepEqual(getInitialGameState(), gameState, "returns the correct gameState object");
 });
 
-const isValidMove = require("./is-valid-move");
+const isValidMove = require("./").isValidMove;
 
 test("isValidMove", t => {
 
@@ -385,7 +385,7 @@ test("isValidMove", t => {
     });           
 });
 
-const makeMove = require("./make-move");
+const makeMove = require("./").makeMove;
 
 test("makeMove", t => {
     
@@ -763,7 +763,27 @@ test("makeMove", t => {
            t.equal(error.gameState, oldGameState, "error.gameState is the same as the gameState");
        }
         
+    });
+    
+    t.test("new game state is not the same as old game state", t => {
+        t.plan(2);
+       
+        const oldGameState = getInitialGameState();
+        oldGameState.isPlayerOne = false;
+        
+        const proposedMove = {
+            currentPosition: 24,
+            numberOfSpaces: 3,
+            isBar: false
+        };
+       
+       const newGameState = makeMove(oldGameState, proposedMove);
+       
+       t.equal(newGameState === oldGameState, false, "the function returns a new game state");
+       t.equal(
+           oldGameState.board[21].isPlayerOne === null && oldGameState.board[21].numPieces === 0,
+           true,
+           "the old game state is not changed"
+        ); 
     });  
 });
-
-// test to check whether oldGameState is changed after it's called
