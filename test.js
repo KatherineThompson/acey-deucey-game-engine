@@ -1,7 +1,7 @@
 "use strict";
 
 const test = require("tape");
-const aceyDeuceyGameEngine = require("./").getInitialGameState;
+const aceyDeuceyGameEngine = require("./");
 const getInitialGameState = aceyDeuceyGameEngine.getInitialGameState;
 
 test("getInitialGameState", t => {
