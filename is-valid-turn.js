@@ -4,10 +4,48 @@ const makeMove = require("./make-move");
 const _ = require("lodash");
 
 function isValidTurn(gameState, diceRoll, proposedMoves) {
+    function getAceyDeucey() {
+        const aceyDeucey = {};
+        diceRoll.forEach(function(roll, index) {
+            if (roll === 1 && !aceyDeucey.hasOwnProperty("oneLocation")) {
+                aceyDeucey.oneLocation = index; 
+            } else if (roll === 2 && !aceyDeucey.hasOwnProperty("twoLocation")) {
+                aceyDeucey.twoLocation = index;
+            } else if (!aceyDeucey.hasOwnProperty("doublesLocation")) {
+                aceyDeucey.doublesLocation = index;
+            } else {
+                aceyDeucey.isAceyDeucey = false;
+            }
+        });
+        return aceyDeucey;
+    }
+    
     function proposedMovesMatchDice() {
-        
-        if (diceRoll.length !== 2) {
-            return false;
+        if (diceRoll.length > 2) {
+                      
+            const aceyDeucey = getAceyDeucey();
+            if (aceyDeucey.isAceyDeucey === false) {
+                return false;
+            }
+
+            if (
+                !(proposedMoves[0].numberOfSpaces === 1 && proposedMoves[1].numberOfSpaces === 2) &&
+                !(proposedMoves[0].numberOfSpaces === 2 && proposedMoves[1].numberOfSpaces === 1)
+            ) {
+                return false;
+            }
+            
+            const sortedAceyDeuceyRoll = _.sortBy(diceRoll);
+            for (let i = 0; i < 3; i++) {
+                sortedAceyDeuceyRoll.push(diceRoll[aceyDeucey.doublesLocation]);
+            }
+            if (sortedAceyDeuceyRoll.length !== proposedMoves.length) {
+                return false;
+            }
+            return _(proposedMoves)
+                .map("numberOfSpaces")
+                .sort()
+                .every((numberOfSpaces, index) => numberOfSpaces === sortedAceyDeuceyRoll[index]);
         }
         
         if (diceRoll[0] === diceRoll[1]) {
@@ -16,7 +54,9 @@ function isValidTurn(gameState, diceRoll, proposedMoves) {
             } 
             return _(proposedMoves).map("numberOfSpaces").every(numberOfSpaces => numberOfSpaces === diceRoll[0]);
         }
-        
+        if (diceRoll.length !== proposedMoves.length) {
+            return false;
+        }
         const sortedDice = _.sortBy(diceRoll);
         return _(proposedMoves)
             .map("numberOfSpaces")
