@@ -77,7 +77,6 @@ function isValidTurn(gameState, diceRoll, proposedMoves) {
         
         const newProposedMoves = proposedMoves.slice(1);
         const newGameState = makeMove(gameState, firstMove);
-        newGameState.isPlayerOne = !newGameState.isPlayerOne;
         
         return proposedMovesAreValid(newGameState, newProposedMoves);
         

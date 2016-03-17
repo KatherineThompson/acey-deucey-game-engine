@@ -5,7 +5,7 @@ const aceyDeuceyGameEngine = require("../");
 const getInitialGameState = aceyDeuceyGameEngine.getInitialGameState;
 const isGameOver = aceyDeuceyGameEngine.isGameOver;
 
-test.only("is game over", t => {
+test("is game over", t => {
     t.test("game hasn't started", t => {
         t.test("player 1", t => {
             t.plan(1);

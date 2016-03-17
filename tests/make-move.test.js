@@ -24,7 +24,6 @@ test("makeMove", t => {
                 const newGameState = getInitialGameState();
                 newGameState.board[13].isPlayerOne = true;
                 newGameState.board[13].numPieces = 1;
-                newGameState.isPlayerOne = false;
                 
                 t.deepEqual(
                     makeMove(oldGameState, moveToEmptySpace),
@@ -44,7 +43,6 @@ test("makeMove", t => {
                 newGameState.board[10].numPieces = 1;
                 newGameState.board[13].isPlayerOne = true;
                 newGameState.board[13].numPieces = 1;
-                newGameState.isPlayerOne = false;
                 
                 t.deepEqual(
                     makeMove(oldGameState, moveToEmptySpace),
@@ -64,6 +62,7 @@ test("makeMove", t => {
                 oldGameState.board[moveToEmptySpace.currentPosition].numPieces = 1;
                 
                 const newGameState = getInitialGameState();
+                newGameState.isPlayerOne = false;
                 newGameState.board[7].isPlayerOne = false;
                 newGameState.board[7].numPieces = 1;
                 
@@ -82,6 +81,7 @@ test("makeMove", t => {
                 oldGameState.isPlayerOne = false;
                 
                 const newGameState = getInitialGameState();
+                newGameState.isPlayerOne = false;
                 newGameState.board[10].isPlayerOne = false;
                 newGameState.board[10].numPieces = 1;
                 newGameState.board[7].isPlayerOne = false;
@@ -117,7 +117,6 @@ test("makeMove", t => {
             ].numPieces = 1;
             
             const newGameState = getInitialGameState();
-            newGameState.isPlayerOne = false;
             newGameState.board[19].isPlayerOne = true;
             newGameState.board[19].numPieces = 2;
             
@@ -143,6 +142,7 @@ test("makeMove", t => {
             ].numPieces = 1;
             
             const newGameState = getInitialGameState();
+            newGameState.isPlayerOne = false;
             newGameState.board[7].isPlayerOne = false;
             newGameState.board[7].numPieces = 2;
             
@@ -167,7 +167,6 @@ test("makeMove", t => {
           const oldGameState = getInitialGameState();
           
           const newGameState = getInitialGameState();
-          newGameState.isPlayerOne = false;
           newGameState.playerOne.initialPieces = 14;
           newGameState.board[3].isPlayerOne = true;
           newGameState.board[3].numPieces = 1;
@@ -192,6 +191,7 @@ test("makeMove", t => {
             oldGameState.isPlayerOne = false;
             
             const newGameState = getInitialGameState();
+            newGameState.isPlayerOne = false;
             newGameState.playerTwo.initialPieces = 14;
             newGameState.board[20].isPlayerOne = false;
             newGameState.board[20].numPieces = 1;
@@ -223,7 +223,6 @@ test("makeMove", t => {
             oldGameState.playerOne.initialPieces = 0;
             
             const newGameState = getInitialGameState();
-            newGameState.isPlayerOne = false;
             newGameState.board[20].isPlayerOne = true;
             newGameState.board[20].numPieces = 2;
             newGameState.playerOne.winningPieces = 13;
@@ -254,6 +253,7 @@ test("makeMove", t => {
             oldGameState.playerTwo.winningPieces = 12;
             
             const newGameState = getInitialGameState();
+            newGameState.isPlayerOne = false;
             newGameState.board[3].isPlayerOne = false;
             newGameState.board[3].numPieces = 2;
             newGameState.playerTwo.initialPieces = 0;
@@ -288,7 +288,6 @@ test("makeMove", t => {
             ].numPieces = 1;
             
             const newGameState = getInitialGameState();
-            newGameState.isPlayerOne = false;
             newGameState.board[18].isPlayerOne = true;
             newGameState.board[18].numPieces = 1;
             newGameState.playerTwo.barPieces = 1;
@@ -315,6 +314,7 @@ test("makeMove", t => {
             ].numPieces = 1;
             
             const newGameState = getInitialGameState();
+            newGameState.isPlayerOne = false;
             newGameState.board[14].isPlayerOne = false;
             newGameState.board[14].numPieces = 1;
             newGameState.playerOne.barPieces = 1;
@@ -341,7 +341,6 @@ test("makeMove", t => {
             oldGameState.playerOne.barPieces = 1;
             
             const newGameState = getInitialGameState();
-            newGameState.isPlayerOne = false;
             newGameState.board[4].isPlayerOne = true;
             newGameState.board[4].numPieces = 1;
             
@@ -366,6 +365,7 @@ test("makeMove", t => {
             oldGameState.playerTwo.barPieces = 1;
             
             const newGameState = getInitialGameState();
+            newGameState.isPlayerOne = false;
             newGameState.board[19].isPlayerOne = false;
             newGameState.board[19].numPieces = 1;
             
