@@ -5,6 +5,18 @@ const _ = require("lodash");
 
 function isValidTurn(gameState, diceRoll, proposedMoves) {
     function proposedMovesMatchDice() {
+        
+        if (diceRoll.length !== 2) {
+            return false;
+        }
+        
+        if (diceRoll[0] === diceRoll[1]) {
+            if (proposedMoves.length !== 4){
+                return false;
+            } 
+            return _(proposedMoves).map("numberOfSpaces").every(numberOfSpaces => numberOfSpaces === diceRoll[0]);
+        }
+        
         const sortedDice = _.sortBy(diceRoll);
         return _(proposedMoves)
             .map("numberOfSpaces")
