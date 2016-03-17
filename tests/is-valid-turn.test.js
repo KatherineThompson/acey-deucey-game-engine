@@ -6,7 +6,7 @@ const getInitialGameState = aceyDeuceyGameEngine.getInitialGameState;
 
 const isValidTurn = aceyDeuceyGameEngine.isValidTurn;
 
-test.only("isValidTurn", t => {
+test("isValidTurn", t => {
     t.test("moving one piece", t => {
         t.test("player 1", t => {
             t.plan(5);
