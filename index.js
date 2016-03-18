@@ -5,5 +5,5 @@ module.exports = {
     isValidTurn: require("./is-valid-turn"),
     isValidMove: require("./is-valid-move"),
     makeMove: require("./make-move"),
-    isGameOver: require("./is-game-over")
+    checkForWinner: require("./check-for-winner")
 };

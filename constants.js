@@ -1,0 +1,1 @@
+module.exports = {NUMBER_OF_GAME_PIECES: 15};
