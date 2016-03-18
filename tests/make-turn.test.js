@@ -6,7 +6,7 @@ const getInitialGameState = aceyDeuceyGameEngine.getInitialGameState;
 
 const makeTurn = aceyDeuceyGameEngine.makeTurn;
 
-test.only("make turn", t => {
+test("make turn", t => {
     t.test("basic turns", t => {
         t.test("player 1", t => {
             t.plan(1);

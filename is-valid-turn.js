@@ -2,22 +2,7 @@
 const isValidMove = require("./is-valid-move");
 const makeMove = require("./make-move");
 const _ = require("lodash");
-
-function getAceyDeucey(diceRoll) {
-    const aceyDeucey = {};
-    diceRoll.forEach(function(roll) {
-        if (roll === 1 && !aceyDeucey.hasOne) {
-            aceyDeucey.hasOne = true; 
-        } else if (roll === 2 && !aceyDeucey.hasTwo) {
-            aceyDeucey.hasTwo = true;
-        } else if (!aceyDeucey.doublesVal) {
-            aceyDeucey.doublesVal = roll;
-        } else {
-            aceyDeucey.isAceyDeucey = false;
-        }
-    });
-    return aceyDeucey;
-}
+const getAceyDeucey = require("./get-acey-deucey");
 
 function isValidTurn(gameState, diceRoll, proposedMoves) {
     function proposedMovesMatchDice() {
@@ -84,4 +69,4 @@ function isValidTurn(gameState, diceRoll, proposedMoves) {
     return proposedMovesMatchDice() && proposedMovesAreValid(gameState, proposedMoves);
 }
 
-module.exports = {isValidTurn: isValidTurn, getAceyDeucey: getAceyDeucey};
+module.exports = isValidTurn;
