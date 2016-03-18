@@ -7,11 +7,11 @@ function isValidTurn(gameState, diceRoll, proposedMoves) {
     function getAceyDeucey() {
         const aceyDeucey = {};
         diceRoll.forEach(function(roll) {
-            if (roll === 1 && !_.has(aceyDeucey, "hasOne")) {
+            if (roll === 1 && !aceyDeucey.hasOne) {
                 aceyDeucey.hasOne = true; 
-            } else if (roll === 2 && !_.has(aceyDeucey, "hasTwo")) {
+            } else if (roll === 2 && !aceyDeucey.hasTwo) {
                 aceyDeucey.hasTwo = true;
-            } else if (!_.has(aceyDeucey, "doublesVal")) {
+            } else if (!aceyDeucey.doublesVal) {
                 aceyDeucey.doublesVal = roll;
             } else {
                 aceyDeucey.isAceyDeucey = false;
