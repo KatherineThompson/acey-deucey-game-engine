@@ -1,11 +1,24 @@
 "use strict";
 const makeMove = require("./make-move");
+const isValidTurn = require("./is-valid-turn").isValidTurn;
+const getAceyDeucey = require("./is-valid-turn").getAceyDeucey;
 
 function makeTurn(gameState, diceRoll, proposedMoves) {
-    // check for isvalidturn and if not throw error
+    
+    if (!isValidTurn(gameState, diceRoll, proposedMoves)) {
+        const err = new Error("The proposed turn is not valid.");
+        err.proposedMoves = proposedMoves;
+        err.gameState = gameState;
+        err.diceRoll = diceRoll;
+        throw err;
+    }
+    
     function makeAllMoves(gameState, proposedMoves) {
         if (!proposedMoves.length) {
-            gameState.isPlayerOne = !gameState.isPlayerOne;
+            const aceyDeucey = getAceyDeucey(diceRoll);
+            if (aceyDeucey.isAceyDeucey === false) {
+                gameState.isPlayerOne = !gameState.isPlayerOne;
+            }
             return gameState;
         }
         

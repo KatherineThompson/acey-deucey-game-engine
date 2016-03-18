@@ -3,27 +3,28 @@ const isValidMove = require("./is-valid-move");
 const makeMove = require("./make-move");
 const _ = require("lodash");
 
+function getAceyDeucey(diceRoll) {
+    const aceyDeucey = {};
+    diceRoll.forEach(function(roll, index) {
+        if (roll === 1 && !aceyDeucey.hasOwnProperty("oneLocation")) {
+            aceyDeucey.oneLocation = index; 
+        } else if (roll === 2 && !aceyDeucey.hasOwnProperty("twoLocation")) {
+            aceyDeucey.twoLocation = index;
+        } else if (!aceyDeucey.hasOwnProperty("doublesLocation")) {
+            aceyDeucey.doublesLocation = index;
+        } else {
+            aceyDeucey.isAceyDeucey = false;
+        }
+    });
+    return aceyDeucey;
+}
+
 function isValidTurn(gameState, diceRoll, proposedMoves) {
-    function getAceyDeucey() {
-        const aceyDeucey = {};
-        diceRoll.forEach(function(roll, index) {
-            if (roll === 1 && !aceyDeucey.hasOwnProperty("oneLocation")) {
-                aceyDeucey.oneLocation = index; 
-            } else if (roll === 2 && !aceyDeucey.hasOwnProperty("twoLocation")) {
-                aceyDeucey.twoLocation = index;
-            } else if (!aceyDeucey.hasOwnProperty("doublesLocation")) {
-                aceyDeucey.doublesLocation = index;
-            } else {
-                aceyDeucey.isAceyDeucey = false;
-            }
-        });
-        return aceyDeucey;
-    }
-    
+   
     function proposedMovesMatchDice() {
         if (diceRoll.length > 2) {
                       
-            const aceyDeucey = getAceyDeucey();
+            const aceyDeucey = getAceyDeucey(diceRoll);
             if (aceyDeucey.isAceyDeucey === false) {
                 return false;
             }
@@ -46,6 +47,9 @@ function isValidTurn(gameState, diceRoll, proposedMoves) {
                 .map("numberOfSpaces")
                 .sort()
                 .every((numberOfSpaces, index) => numberOfSpaces === sortedAceyDeuceyRoll[index]);
+        }
+        if (!_(diceRoll).every(roll => roll > 0 && roll < 7)) {
+            return false;
         }
         
         if (diceRoll[0] === diceRoll[1]) {
@@ -85,4 +89,4 @@ function isValidTurn(gameState, diceRoll, proposedMoves) {
     return proposedMovesMatchDice() && proposedMovesAreValid(gameState, proposedMoves);
 }
 
-module.exports = isValidTurn;
+module.exports = {isValidTurn: isValidTurn, getAceyDeucey: getAceyDeucey};
