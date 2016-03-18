@@ -5,13 +5,13 @@ const _ = require("lodash");
 
 function getAceyDeucey(diceRoll) {
     const aceyDeucey = {};
-    diceRoll.forEach(function(roll, index) {
-        if (roll === 1 && !aceyDeucey.hasOwnProperty("oneLocation")) {
-            aceyDeucey.oneLocation = index; 
-        } else if (roll === 2 && !aceyDeucey.hasOwnProperty("twoLocation")) {
-            aceyDeucey.twoLocation = index;
-        } else if (!aceyDeucey.hasOwnProperty("doublesLocation")) {
-            aceyDeucey.doublesLocation = index;
+    diceRoll.forEach(function(roll) {
+        if (roll === 1 && !aceyDeucey.hasOne) {
+            aceyDeucey.hasOne = true; 
+        } else if (roll === 2 && !aceyDeucey.hasTwo) {
+            aceyDeucey.hasTwo = true;
+        } else if (!aceyDeucey.doublesVal) {
+            aceyDeucey.doublesVal = roll;
         } else {
             aceyDeucey.isAceyDeucey = false;
         }
@@ -20,7 +20,6 @@ function getAceyDeucey(diceRoll) {
 }
 
 function isValidTurn(gameState, diceRoll, proposedMoves) {
-   
     function proposedMovesMatchDice() {
         if (diceRoll.length > 2) {
                       
@@ -29,24 +28,20 @@ function isValidTurn(gameState, diceRoll, proposedMoves) {
                 return false;
             }
 
-            if (
-                !(proposedMoves[0].numberOfSpaces === 1 && proposedMoves[1].numberOfSpaces === 2) &&
-                !(proposedMoves[0].numberOfSpaces === 2 && proposedMoves[1].numberOfSpaces === 1)
-            ) {
+            if (!_(proposedMoves).take(2).map("numberOfSpaces").sortBy().isEqual([1, 2])) {
                 return false;
             }
             
             const sortedAceyDeuceyRoll = _.sortBy(diceRoll);
-            for (let i = 0; i < 3; i++) {
-                sortedAceyDeuceyRoll.push(diceRoll[aceyDeucey.doublesLocation]);
-            }
+            _(3).range().forEach(() => sortedAceyDeuceyRoll.push(aceyDeucey.doublesVal));
+
             if (sortedAceyDeuceyRoll.length !== proposedMoves.length) {
                 return false;
             }
             return _(proposedMoves)
                 .map("numberOfSpaces")
-                .sort()
-                .every((numberOfSpaces, index) => numberOfSpaces === sortedAceyDeuceyRoll[index]);
+                .sortBy()
+                .isEqual(sortedAceyDeuceyRoll);
         }
         if (!_(diceRoll).every(roll => roll > 0 && roll < 7)) {
             return false;
@@ -56,7 +51,7 @@ function isValidTurn(gameState, diceRoll, proposedMoves) {
             if (proposedMoves.length !== 4){
                 return false;
             } 
-            return _(proposedMoves).map("numberOfSpaces").every(numberOfSpaces => numberOfSpaces === diceRoll[0]);
+            return _(proposedMoves).map("numberOfSpaces").uniq().isEqual([diceRoll[0]]);
         }
         if (diceRoll.length !== proposedMoves.length) {
             return false;
