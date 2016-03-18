@@ -4,7 +4,7 @@
   "description": "a game engine for the backgammon variant acey deucey",
   "main": "index.js",
   "scripts": {
-    "test": "jshint -c .jshintrc test.js get-initial-game-state.js is-valid-move.js && tape test.js | tap-difflet"
+    "test": "jshint -c .jshintrc get-initial-game-state.js is-valid-move.js is-valid-turn.js make-move.js tests && tape tests/*.test.js | tap-difflet"
   },
   "repository": {
     "type": "git",
