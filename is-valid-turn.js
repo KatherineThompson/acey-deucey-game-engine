@@ -2,28 +2,13 @@
 const isValidMove = require("./is-valid-move");
 const makeMove = require("./make-move");
 const _ = require("lodash");
+const getAceyDeucey = require("./get-acey-deucey");
 
 function isValidTurn(gameState, diceRoll, proposedMoves) {
-    function getAceyDeucey() {
-        const aceyDeucey = {};
-        diceRoll.forEach(function(roll) {
-            if (roll === 1 && !aceyDeucey.hasOne) {
-                aceyDeucey.hasOne = true; 
-            } else if (roll === 2 && !aceyDeucey.hasTwo) {
-                aceyDeucey.hasTwo = true;
-            } else if (!aceyDeucey.doublesVal) {
-                aceyDeucey.doublesVal = roll;
-            } else {
-                aceyDeucey.isAceyDeucey = false;
-            }
-        });
-        return aceyDeucey;
-    }
-    
     function proposedMovesMatchDice() {
         if (diceRoll.length > 2) {
                       
-            const aceyDeucey = getAceyDeucey();
+            const aceyDeucey = getAceyDeucey(diceRoll);
             if (aceyDeucey.isAceyDeucey === false) {
                 return false;
             }
@@ -42,6 +27,9 @@ function isValidTurn(gameState, diceRoll, proposedMoves) {
                 .map("numberOfSpaces")
                 .sortBy()
                 .isEqual(sortedAceyDeuceyRoll);
+        }
+        if (!_(diceRoll).every(roll => roll > 0 && roll < 7)) {
+            return false;
         }
         
         if (diceRoll[0] === diceRoll[1]) {
@@ -73,7 +61,6 @@ function isValidTurn(gameState, diceRoll, proposedMoves) {
         
         const newProposedMoves = proposedMoves.slice(1);
         const newGameState = makeMove(gameState, firstMove);
-        newGameState.isPlayerOne = !newGameState.isPlayerOne;
         
         return proposedMovesAreValid(newGameState, newProposedMoves);
         
