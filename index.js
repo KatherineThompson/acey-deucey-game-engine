@@ -7,5 +7,6 @@ module.exports = {
     makeMove: require("./make-move"),
     makeTurn: require("./make-turn"),
     checkForWinner: require("./check-for-winner"),
-    getAceyDeucey: require("./get-acey-deucey")
+    getAceyDeucey: require("./get-acey-deucey"),
+    findAvailableSpaces: require("./find-available-spaces")
 };

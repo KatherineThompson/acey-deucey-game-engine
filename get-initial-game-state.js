@@ -18,7 +18,6 @@ function getInitialGameState() {
         },             
     };
     
-// adds an object for each of the 24 spaces on the board    
 gameState.board = _(24).range().map(() => ({isPlayerOne: null, numPieces: 0})).value();
     return gameState;
 }
