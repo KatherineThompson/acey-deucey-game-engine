@@ -609,9 +609,11 @@ test.only("isValidTurn", t => {
                 );
                 
                 aceyDeuceyGameState.board[proposedAceyDeuceyMoves[0].currentPosition].isPlayerOne = true;
-                aceyDeuceyGameState.board[proposedAceyDeuceyMoves[0].currentPosition].numPieces = 2;
+                aceyDeuceyGameState.board[proposedAceyDeuceyMoves[0].currentPosition].numPieces = 4;
                 aceyDeuceyGameState.board[8].isPlayerOne = false;
                 aceyDeuceyGameState.board[8].numPieces = 3;
+                aceyDeuceyGameState.board[9].isPlayerOne = false;
+                aceyDeuceyGameState.board[9].numPieces = 3;
                 
                 t.equal(
                     isValidTurn(aceyDeuceyGameState, aceyDeuceyRoll, proposedAceyDeuceyMoves),
