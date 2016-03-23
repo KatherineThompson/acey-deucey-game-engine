@@ -5,7 +5,7 @@ const aceyDeuceyGameEngine = require("../lib");
 const getInitialGameState = aceyDeuceyGameEngine.getInitialGameState;
 const findAvailableSpaces = aceyDeuceyGameEngine.findAvailableSpaces;
 
-test.only("find available spaces", t => {
+test("find available spaces", t => {
     t.test("available move from start", t => {
         t.test("player 1", t => {
             t.plan(1);
