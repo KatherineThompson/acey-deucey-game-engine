@@ -5,7 +5,7 @@ const aceyDeuceyGameEngine = require("../lib");
 const getInitialGameState = aceyDeuceyGameEngine.getInitialGameState;
 const canMoveToSpace = aceyDeuceyGameEngine.canMoveToSpace;
 
-test.only("can move to space", t => {
+test("can move to space", t => {
     t.test("own space", t => {
         t.test("player 1", t => {
             t.plan(1);
