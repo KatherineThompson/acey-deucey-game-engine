@@ -8,5 +8,6 @@ module.exports = {
     makeTurn: require("./make-turn"),
     checkForWinner: require("./check-for-winner"),
     getAceyDeucey: require("./get-acey-deucey"),
-    findAvailableSpaces: require("./find-available-spaces")
+    findAvailableSpaces: require("./find-available-spaces"),
+    canMoveOffBoard: require("./can-move-off-board")
 };

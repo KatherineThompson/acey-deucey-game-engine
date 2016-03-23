@@ -1,7 +1,5 @@
 "use strict";
 
-            // can't move - partially, wholly, can move off
-            // acey deucey - no doubles
 const isValidMove = require("./is-valid-move");
 const makeMove = require("./make-move");
 const _ = require("lodash");
@@ -17,17 +15,45 @@ function isValidTurn(gameState, diceRoll, proposedMoves) {
             if (aceyDeucey.isAceyDeucey === false) {
                 return false;
             }
-
-            if (!_(proposedMoves).take(2).map("numberOfSpaces").sortBy().isEqual([1, 2])) {
-                return false;
-            }
             
             const sortedAceyDeuceyRoll = _.sortBy(diceRoll);
             _(3).range().forEach(() => sortedAceyDeuceyRoll.push(aceyDeucey.doublesVal));
 
-            if (sortedAceyDeuceyRoll.length !== proposedMoves.length) {
+            if (!_(proposedMoves).take(2).map("numberOfSpaces").sortBy().isEqual([1, 2])) {
+                if (proposedMoves.length === 0) {
+                    const aceySpaces = findAvailableSpaces(gameState, 1);
+                    const deuceySpaces = findAvailableSpaces(gameState, 2);
+                
+                    return !aceySpaces.length && !deuceySpaces.length;
+                }
+                let newGameState = gameState;
+                proposedMoves.forEach(move => {
+                    if (isValidMove(newGameState, move)) {
+                        newGameState = makeMove(newGameState, move);
+                    }
+                });
+                const nextRoll = proposedMoves[0] === 1 ? 2 : 1;
+                const nextAvailableSpaces = findAvailableSpaces(newGameState, nextRoll);
+                if (!nextAvailableSpaces.length) {
+                    return true;
+                }
                 return false;
             }
+            
+            if (proposedMoves.length < sortedAceyDeuceyRoll.length) {
+                let newGameState = gameState;
+                proposedMoves.forEach(move => {
+                    if (isValidMove(newGameState, move)) {
+                        newGameState = makeMove(newGameState, move);
+                    }
+                });
+                const availableDoublesSpaces = findAvailableSpaces(newGameState, aceyDeucey[2]);
+                if (!availableDoublesSpaces.length) {
+                    return true;
+                }
+                return false;                
+            }
+            
             return _(proposedMoves)
                 .map("numberOfSpaces")
                 .sortBy()
@@ -38,10 +64,23 @@ function isValidTurn(gameState, diceRoll, proposedMoves) {
         }
         
         if (diceRoll[0] === diceRoll[1]) {
-            if (proposedMoves.length !== 4){
+            if (proposedMoves.length < 4){
+                let newGameState = gameState;
+                proposedMoves.forEach(function(move) {
+                    if (isValidMove(newGameState, move)) {
+                        newGameState = makeMove(newGameState, move);
+                    }
+                });
+                const availableSpaces = findAvailableSpaces(newGameState, diceRoll[0]);
+                if (!availableSpaces.length) {
+                    return true;
+                }
+            }
+            
+            if (proposedMoves.length > 4) {
                 return false;
-                // fix not having enough moves
-            } 
+            }
+             
             return _(proposedMoves).map("numberOfSpaces").uniq().isEqual([diceRoll[0]]);
         }
         
@@ -56,6 +95,18 @@ function isValidTurn(gameState, diceRoll, proposedMoves) {
                 
                 const availableSpaces = findAvailableSpaces(newGameState, numberOfSpaces);
                 if (!availableSpaces.length) {
+                    return true;
+                }
+            }
+            
+            if (!proposedMoves.length) {
+                const firstRoll = diceRoll[0];
+                const secondRoll = diceRoll[1];
+                
+                const firstAvailableSpaces = findAvailableSpaces(gameState, firstRoll);
+                const secondAvailableSpaces = findAvailableSpaces(gameState, secondRoll);
+                
+                if (!firstAvailableSpaces.length && !secondAvailableSpaces.length) {
                     return true;
                 }
             }
