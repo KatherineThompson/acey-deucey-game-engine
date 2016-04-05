@@ -461,4 +461,361 @@ test("isValidTurn", t => {
                                     
         });        
     });
+    
+    t.test("not all rolls can be used", t => {
+       t.test("player 1", t => {
+           t.test("winning roll", t => {
+               t.plan(1);
+                const diceRoll = [5, 4];
+                
+                const proposedWinningMove = [{currentPosition: 22, numberOfSpaces: diceRoll[0], isBar: false}];
+                
+                const gameState = getInitialGameState();
+                gameState.playerOne.winningPieces = 14;
+                gameState.playerOne.initialPieces = 0;           
+                gameState.board[proposedWinningMove[0].currentPosition].isPlayerOne = true;
+                gameState.board[proposedWinningMove[0].currentPosition].numPieces = 1;      
+                
+                t.equal(
+                    isValidTurn(gameState, diceRoll, proposedWinningMove),
+                    true,
+                    "a turn with fewer moves than dice rolls is valid when there is only one die to move to win"
+                );         
+           });
+           
+           t.test("no possible moves", t => {
+                t.plan(1);
+                
+                const diceRoll = [5, 4];
+                const proposedCompletelyBlockedMove = [];
+                const gameState = getInitialGameState();
+                
+                gameState.playerOne.initialPieces = 0;
+                gameState.board[9].isPlayerOne = true;
+                gameState.board[9].numPieces = 1;
+                gameState.board[10].isPlayerOne = true;
+                gameState.board[10].numPieces = 1;
+                
+                gameState.board[14].isPlayerOne = false;
+                gameState.board[14].numPieces = 2;
+                gameState.board[13].isPlayerOne = false;
+                gameState.board[13].numPieces = 2;
+                gameState.board[15].isPlayerOne = false;
+                gameState.board[15].numPieces = 2;
+                
+                t.equal(
+                    isValidTurn(gameState, diceRoll, proposedCompletelyBlockedMove),
+                    true,
+                    "a turn with no moves is valid when the pieces cannot move anywhere"
+                );               
+           });  
+           
+           t.test("only one possible move", t => {
+                t.plan(4);
+                
+                const partiallyBlockedDiceRoll = [5, 6];
+                
+                const proposedPartiallyBlockedMove = [
+                    {currentPosition: 10, numberOfSpaces: partiallyBlockedDiceRoll[1], isBar: false}
+                    ];
+                    
+                const gameState = getInitialGameState();
+                gameState.playerOne.initialPieces = 0;                
+                gameState.board[10].isPlayerOne = true;
+                gameState.board[10].numPieces = 1;
+                gameState.board[15].isPlayerOne = false;
+                gameState.board[15].numPieces = 2;
+                gameState.board[21].isPlayerOne = false;
+                gameState.board[21].numPieces = 2;
+                
+                t.equal(
+                    isValidTurn(gameState, partiallyBlockedDiceRoll, proposedPartiallyBlockedMove),
+                    true,
+                    "the turn is valid when only one roll can be used"
+                );
+                
+                gameState.board[22].isPlayerOne = true;
+                gameState.board[22].numPieces = 1;
+                
+                t.equal(
+                    isValidTurn(gameState, partiallyBlockedDiceRoll, proposedPartiallyBlockedMove),
+                    true,
+                    "the turn is valid when only one roll can be used and there are pieces that could be moved off " +
+                            "the board if all the pieces were in that quarter"
+                );
+                
+                gameState.board[18].isPlayerOne = true;
+                gameState.board[18].numPieces = 1;
+                
+                t.equal(
+                    isValidTurn(gameState, partiallyBlockedDiceRoll, proposedPartiallyBlockedMove),
+                    false,
+                    "the turn is not valid when there is a possible move"
+                );
+                
+                gameState.board[18].isPlayerOne = null;
+                gameState.board[18].numPieces = 0;
+                gameState.playerOne.initialPieces = 1;
+                
+                t.equal(
+                    isValidTurn(gameState, partiallyBlockedDiceRoll, proposedPartiallyBlockedMove),
+                    false,
+                    "the turn is not valid when there is an available move from off the board"
+                );
+                               
+           });
+           
+           t.test("doubles", t => {
+               t.plan(1);
+               
+               const diceRoll = [3, 3];
+               
+               const proposedDoublesMoves = [
+                   {currentPosition: 6, numberOfSpaces: diceRoll[0], isBar: false},
+                   {currentPosition: 6, numberOfSpaces: diceRoll[0], isBar: false}
+               ];
+               
+               const gameState = getInitialGameState();
+               gameState.playerOne.initialPieces = 0;               
+               gameState.board[proposedDoublesMoves[0].currentPosition].isPlayerOne = true;
+               gameState.board[proposedDoublesMoves[0].currentPosition].numPieces = 2;
+               
+               gameState.board[12].isPlayerOne = false;
+               gameState.board[12].numPieces = 2;
+               
+               t.equal(
+                   isValidTurn(gameState, diceRoll, proposedDoublesMoves),
+                   true,
+                   "the turn is valid when only some of the doubles can be moved"
+               );
+           });
+           
+           t.test("acey deucey", t => {
+                t.plan(3);
+                const aceyDeuceyRoll = [1, 2, 4];
+                
+                const proposedAceyDeuceyMoves = [{currentPosition: 6, numberOfSpaces: aceyDeuceyRoll[0], isBar: false}];
+                
+                const aceyDeuceyGameState = getInitialGameState();
+                
+                const noProposedMoves = [];
+                
+                aceyDeuceyGameState.playerOne.initialPieces = 0;
+                
+                t.equal(
+                    isValidTurn(aceyDeuceyGameState, aceyDeuceyRoll, noProposedMoves),
+                    true,
+                    "the turn is valid when there are no moves available"
+                );
+                
+                aceyDeuceyGameState.board[proposedAceyDeuceyMoves[0].currentPosition].isPlayerOne = true;
+                aceyDeuceyGameState.board[proposedAceyDeuceyMoves[0].currentPosition].numPieces = 4;
+                aceyDeuceyGameState.board[8].isPlayerOne = false;
+                aceyDeuceyGameState.board[8].numPieces = 3;
+                aceyDeuceyGameState.board[9].isPlayerOne = false;
+                aceyDeuceyGameState.board[9].numPieces = 3;
+                
+                t.equal(
+                    isValidTurn(aceyDeuceyGameState, aceyDeuceyRoll, proposedAceyDeuceyMoves),
+                    true,
+                    "the turn is valid when an acey deucey is rolled and only one move can be made"
+                );
+                
+                const proposedInvalidAceyDeuceyMoves = [
+                    {currentPosition: 7, numberOfSpaces: aceyDeuceyRoll[1], isBar: false},
+                    {currentPosition: 6, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
+                    {currentPosition: 9, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
+                    {currentPosition: 10, numberOfSpaces: aceyDeuceyRoll[2], isBar: false}
+                ];
+                    
+                t.equal(
+                    isValidTurn(aceyDeuceyGameState, aceyDeuceyRoll, proposedInvalidAceyDeuceyMoves),
+                    false,
+                    "the turn is not valid when a player cannot move the 1 and 2 of an acey deucey" + 
+                        "and tries to move doubles"
+                );               
+           });
+           
+       });
+    });
+       t.test("player 2", t => {
+           t.test("winning roll", t => {
+               t.plan(1);
+                const diceRoll = [5, 4];
+                
+                const proposedWinningMove = [{currentPosition: 1, numberOfSpaces: diceRoll[0], isBar: false}];
+                
+                const gameState = getInitialGameState();
+                gameState.isPlayerOne = false;
+                gameState.playerTwo.winningPieces = 14;
+                gameState.playerTwo.initialPieces = 0;           
+                gameState.board[proposedWinningMove[0].currentPosition].isPlayerOne = false;
+                gameState.board[proposedWinningMove[0].currentPosition].numPieces = 1;      
+                
+                t.equal(
+                    isValidTurn(gameState, diceRoll, proposedWinningMove),
+                    true,
+                    "a turn with fewer moves than dice rolls is valid when there is only one die to move to win"
+                );         
+           });
+           
+           t.test("no possible moves", t => {
+                t.plan(1);
+                
+                const diceRoll = [5, 4];
+                const proposedCompletelyBlockedMove = [];
+                const gameState = getInitialGameState();
+                
+                gameState.isPlayerOne = false;
+                gameState.playerTwo.initialPieces = 0;
+                gameState.board[19].isPlayerOne = false;
+                gameState.board[19].numPieces = 1;
+                gameState.board[18].isPlayerOne = false;
+                gameState.board[18].numPieces = 1;
+                
+                gameState.board[14].isPlayerOne = true;
+                gameState.board[14].numPieces = 2;
+                gameState.board[13].isPlayerOne = true;
+                gameState.board[13].numPieces = 2;
+                gameState.board[15].isPlayerOne = true;
+                gameState.board[15].numPieces = 2;
+                
+                t.equal(
+                    isValidTurn(gameState, diceRoll, proposedCompletelyBlockedMove),
+                    true,
+                    "a turn with no moves is valid when the pieces cannot move anywhere"
+                );               
+           });  
+           
+           t.test("only one possible move", t => {
+                t.plan(4);
+                
+                const partiallyBlockedDiceRoll = [5, 6];
+                
+                const proposedPartiallyBlockedMove = [
+                    {currentPosition: 18, numberOfSpaces: partiallyBlockedDiceRoll[1], isBar: false}
+                    ];
+                    
+                const gameState = getInitialGameState();
+                gameState.isPlayerOne = false;
+                gameState.playerTwo.initialPieces = 0;                
+                gameState.board[18].isPlayerOne = false;
+                gameState.board[18].numPieces = 1;
+                gameState.board[13].isPlayerOne = true;
+                gameState.board[13].numPieces = 2;
+                gameState.board[7].isPlayerOne = true;
+                gameState.board[7].numPieces = 2;
+                
+                t.equal(
+                    isValidTurn(gameState, partiallyBlockedDiceRoll, proposedPartiallyBlockedMove),
+                    true,
+                    "the turn is valid when only one roll can be used"
+                );
+                
+                gameState.board[2].isPlayerOne = false;
+                gameState.board[2].numPieces = 1;
+                
+                t.equal(
+                    isValidTurn(gameState, partiallyBlockedDiceRoll, proposedPartiallyBlockedMove),
+                    true,
+                    "the turn is valid when only one roll can be used and there are pieces that could be moved off " +
+                            "the board if all the pieces were in that quarter"
+                );
+                
+                gameState.board[10].isPlayerOne = false;
+                gameState.board[10].numPieces = 1;
+                
+                t.equal(
+                    isValidTurn(gameState, partiallyBlockedDiceRoll, proposedPartiallyBlockedMove),
+                    false,
+                    "the turn is not valid when there is a possible move"
+                );
+                
+                gameState.board[10].isPlayerOne = null;
+                gameState.board[10].numPieces = 0;
+                gameState.playerTwo.initialPieces = 1;
+                
+                t.equal(
+                    isValidTurn(gameState, partiallyBlockedDiceRoll, proposedPartiallyBlockedMove),
+                    false,
+                    "the turn is not valid when there is an available move from off the board"
+                );
+                               
+           });
+           
+           t.test("doubles", t => {
+               t.plan(1);
+               
+               const diceRoll = [3, 3];
+               
+               const proposedDoublesMoves = [
+                   {currentPosition: 15, numberOfSpaces: diceRoll[0], isBar: false},
+                   {currentPosition: 15, numberOfSpaces: diceRoll[0], isBar: false}
+               ];
+               
+               const gameState = getInitialGameState();
+               gameState.isPlayerOne = false;
+               gameState.playerTwo.initialPieces = 0;               
+               gameState.board[proposedDoublesMoves[0].currentPosition].isPlayerOne = false;
+               gameState.board[proposedDoublesMoves[0].currentPosition].numPieces = 2;
+               
+               gameState.board[9].isPlayerOne = true;
+               gameState.board[9].numPieces = 2;
+               
+               t.equal(
+                   isValidTurn(gameState, diceRoll, proposedDoublesMoves),
+                   true,
+                   "the turn is valid when only some of the doubles can be moved"
+               );
+           });
+           
+           t.test("acey deucey", t => {
+                t.plan(3);
+                const aceyDeuceyRoll = [1, 2, 4];
+                
+                const proposedAceyDeuceyMoves = [
+                    {currentPosition: 20, numberOfSpaces: aceyDeuceyRoll[0], isBar: false}
+                ];
+                
+                const aceyDeuceyGameState = getInitialGameState();
+                aceyDeuceyGameState.isPlayerOne = false;
+                const noProposedMoves = [];
+                
+                aceyDeuceyGameState.playerTwo.initialPieces = 0;
+                
+                t.equal(
+                    isValidTurn(aceyDeuceyGameState, aceyDeuceyRoll, noProposedMoves),
+                    true,
+                    "the turn is valid when there are no moves available"
+                );
+                
+                aceyDeuceyGameState.board[proposedAceyDeuceyMoves[0].currentPosition].isPlayerOne = false;
+                aceyDeuceyGameState.board[proposedAceyDeuceyMoves[0].currentPosition].numPieces = 4;
+                aceyDeuceyGameState.board[18].isPlayerOne = true;
+                aceyDeuceyGameState.board[18].numPieces = 3;
+                aceyDeuceyGameState.board[17].isPlayerOne = true;
+                aceyDeuceyGameState.board[17].numPieces = 3;
+                
+                t.equal(
+                    isValidTurn(aceyDeuceyGameState, aceyDeuceyRoll, proposedAceyDeuceyMoves),
+                    true,
+                    "the turn is valid when an acey deucey is rolled and only one move can be made"
+                );
+                
+                const proposedInvalidAceyDeuceyMoves = [
+                    {currentPosition: 7, numberOfSpaces: aceyDeuceyRoll[1], isBar: false},
+                    {currentPosition: 6, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
+                    {currentPosition: 9, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
+                    {currentPosition: 10, numberOfSpaces: aceyDeuceyRoll[2], isBar: false}
+                ];
+                    
+                t.equal(
+                    isValidTurn(aceyDeuceyGameState, aceyDeuceyRoll, proposedInvalidAceyDeuceyMoves),
+                    false,
+                    "the turn is not valid when a player cannot move the 1 and 2 of an acey deucey" + 
+                        "and tries to move doubles"
+                );               
+           });
+           
+       });    
 });
