@@ -61,6 +61,15 @@ Returns an array of numbers that correspond to the indices of the spaces
 (including `-1` and `24` which are not in the board array, but signify positions off the board)
 that are available for the player to move to.
 
+###`aceyDeuceyGameEngine.findPossibleMoves(gameState, selectedPieceIndex, diceRoll, isBar)`
+`selectedPieceIndex` is a number indicating the index of a selected piece.
+`diceRoll` is an array of numbers corresponding to the numbers rolled on the dice.
+`isBar` is a boolean indicating whether the selected piece is on the bar.
+
+Returns an array of numbers indicating the spaces that are available for the selected piece to be moved to.
+If `diceRoll` is a doubles roll, the array will only return one number in the array.
+If no moves are available, the array will be empty.
+
 ###`aceyDeuceyGameEngine.getAceyDeucey(diceRoll)`
 `diceRoll` is an array of numbers corresponding to the numbers rolled on the dice.
 
