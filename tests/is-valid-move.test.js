@@ -7,7 +7,7 @@ const getInitialGameState = aceyDeuceyGameEngine.getInitialGameState;
 
 const isValidMove = aceyDeuceyGameEngine.isValidMove;
 
-test.only("isValidMove", t => {
+test("isValidMove", t => {
 
     t.test("moving onto the board", t => {
         t.test("player 1", t => {
