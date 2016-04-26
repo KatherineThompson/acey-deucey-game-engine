@@ -67,7 +67,7 @@ that are available for the player to move to.
 `isBar` is a boolean indicating whether the selected piece is on the bar.
 
 Returns an array of numbers indicating the spaces that are available for the selected piece to be moved to.
-If `diceRoll` is a doubles roll, the array will only return one number in the array.
+If `diceRoll` is a doubles roll, the array will only contain a single value.
 If no moves are available, the array will be empty.
 
 ###`aceyDeuceyGameEngine.getAceyDeucey(diceRoll)`

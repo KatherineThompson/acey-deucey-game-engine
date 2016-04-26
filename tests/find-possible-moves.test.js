@@ -17,7 +17,7 @@ test.only("find possible moves from a space", t => {
             const possibleMoves = [1, 2];
             
             t.deepEqual(
-                findPossibleMoves(gameState, selectedPieceIndex, diceRoll, false),
+                findPossibleMoves(gameState, diceRoll, false, selectedPieceIndex),
                 possibleMoves,
                 "the correct moves are returned when player 1 has a move on the board"
             );
@@ -34,7 +34,7 @@ test.only("find possible moves from a space", t => {
             const possibleMoves = [22, 21];
             
             t.deepEqual(
-                findPossibleMoves(gameState, selectedPieceIndex, diceRoll, false),
+                findPossibleMoves(gameState, diceRoll, false, selectedPieceIndex),
                 possibleMoves,
                 "the correct moves are returned when player 2 has a move onto the board"
             );
@@ -54,7 +54,7 @@ test.only("find possible moves from a space", t => {
             const possibleMoves = [15, 18];
             
             t.deepEqual(
-                findPossibleMoves(gameState, selectedPieceIndex, diceRoll, false),
+                findPossibleMoves(gameState, diceRoll, false, selectedPieceIndex),
                 possibleMoves,
                 "the correct moves are returned when player 1 has a move from on the board"
             );
@@ -73,7 +73,7 @@ test.only("find possible moves from a space", t => {
             const possibleMoves = [13, 10];
             
             t.deepEqual(
-                findPossibleMoves(gameState, selectedPieceIndex, diceRoll, false),
+                findPossibleMoves(gameState, diceRoll, false, selectedPieceIndex),
                 possibleMoves,
                 "the correct moves are returned when player 2 has a move from on the board"
             );
@@ -85,13 +85,12 @@ test.only("find possible moves from a space", t => {
             t.plan(1);
             
             const gameState = getInitialGameState();
-            const selectedPieceIndex = -1;
             const diceRoll = [5, 2];
             
             const possibleMoves = [4, 1];
             
             t.deepEqual(
-                findPossibleMoves(gameState, selectedPieceIndex, diceRoll, true),
+                findPossibleMoves(gameState, diceRoll, true),
                 possibleMoves,
                 "the correct moves are returned when player 1 has a move from on the bar"
             );
@@ -102,13 +101,12 @@ test.only("find possible moves from a space", t => {
             
             const gameState = getInitialGameState();
             gameState.isPlayerOne = false;
-            const selectedPieceIndex = 24;
             const diceRoll = [5, 2];
             
             const possibleMoves = [19, 22];
             
             t.deepEqual(
-                findPossibleMoves(gameState, selectedPieceIndex, diceRoll, true),
+                findPossibleMoves(gameState, diceRoll, true),
                 possibleMoves,
                 "the correct moves are returned when player 2 has a move from on the bar"
             );
@@ -129,7 +127,7 @@ test.only("find possible moves from a space", t => {
             const possibleMoves = [24, 23];
             
             t.deepEqual(
-                findPossibleMoves(gameState, selectedPieceIndex, diceRoll, false),
+                findPossibleMoves(gameState, diceRoll, false, selectedPieceIndex),
                 possibleMoves,
                 "the correct moves are returned when player 1 has a move off the board"
             );
@@ -149,7 +147,7 @@ test.only("find possible moves from a space", t => {
             const possibleMoves = [-1, 0];
             
             t.deepEqual(
-                findPossibleMoves(gameState, selectedPieceIndex, diceRoll, false),
+                findPossibleMoves(gameState, diceRoll, false, selectedPieceIndex),
                 possibleMoves,
                 "the correct moves are returned when player 2 has a move off the board"
             );
@@ -170,7 +168,7 @@ test.only("find possible moves from a space", t => {
             const possibleMoves = [20];
             
             t.deepEqual(
-                findPossibleMoves(gameState, selectedPieceIndex, diceRoll, false),
+                findPossibleMoves(gameState, diceRoll, false, selectedPieceIndex),
                 possibleMoves,
                 "the correct moves are returned when player 1 has a doubles move"
             );
@@ -189,7 +187,7 @@ test.only("find possible moves from a space", t => {
             const possibleMoves = [14];
             
             t.deepEqual(
-                findPossibleMoves(gameState, selectedPieceIndex, diceRoll, false),
+                findPossibleMoves(gameState, diceRoll, false, selectedPieceIndex),
                 possibleMoves,
                 "the correct moves are returned when player 2 has a doubles move"
             );
@@ -209,7 +207,7 @@ test.only("find possible moves from a space", t => {
             const possibleMoves = [];
             
             t.deepEqual(
-                findPossibleMoves(gameState, selectedPieceIndex, diceRoll, false),
+                findPossibleMoves(gameState, diceRoll, false, selectedPieceIndex),
                 possibleMoves,
                 "the correct moves are returned when player 1 cannot move off the board"
             );
@@ -223,7 +221,7 @@ test.only("find possible moves from a space", t => {
             gameState.board[blockedIndex + diceRoll[1]].numPieces = 3;
             
             t.deepEqual(
-                findPossibleMoves(gameState, blockedIndex, diceRoll, false),
+                findPossibleMoves(gameState, diceRoll, false, blockedIndex),
                 possibleMoves,
                 "the correct moves are returned when player 1 is blocked"
             );
@@ -243,7 +241,7 @@ test.only("find possible moves from a space", t => {
             const possibleMoves = [];
             
             t.deepEqual(
-                findPossibleMoves(gameState, selectedPieceIndex, diceRoll, false),
+                findPossibleMoves(gameState, diceRoll, false, selectedPieceIndex),
                 possibleMoves,
                 "the correct moves are returned when player 2 cannot move off the board"
             );
@@ -257,7 +255,7 @@ test.only("find possible moves from a space", t => {
             gameState.board[blockedIndex - diceRoll[1]].numPieces = 3;
             
             t.deepEqual(
-                findPossibleMoves(gameState, blockedIndex, diceRoll, false),
+                findPossibleMoves(gameState, diceRoll, false, blockedIndex),
                 possibleMoves,
                 "the correct moves are returned when player 2 is blocked"
             );
