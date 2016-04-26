@@ -10,5 +10,6 @@ module.exports = {
     getAceyDeucey: require("./lib/get-acey-deucey"),
     findAvailableSpaces: require("./lib/find-available-spaces"),
     canMoveOffBoard: require("./lib/can-move-off-board"),
-    canMoveToSpace: require("./lib/can-move-to-space")
+    canMoveToSpace: require("./lib/can-move-to-space"),
+    findPossibleMoves: require("./lib/find-possible-moves")
 };
