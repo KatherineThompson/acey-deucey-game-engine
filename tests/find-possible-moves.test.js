@@ -85,6 +85,7 @@ test("find possible moves from a space", t => {
             t.plan(1);
             
             const gameState = getInitialGameState();
+            gameState.playerOne.barPieces = 1;
             const diceRoll = [5, 2];
             
             const possibleMoves = [4, 1];
@@ -101,6 +102,7 @@ test("find possible moves from a space", t => {
             
             const gameState = getInitialGameState();
             gameState.isPlayerOne = false;
+            gameState.playerTwo.barPieces = 1;
             const diceRoll = [5, 2];
             
             const possibleMoves = [19, 22];

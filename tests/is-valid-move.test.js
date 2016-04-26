@@ -292,7 +292,7 @@ test("isValidMove", t => {
         };
         
         t.test("player 1", t => {
-            t.plan(2);
+            t.plan(3);
             
             const gameState = getInitialGameState();
             gameState.playerOne.barPieces = 1;
@@ -315,11 +315,20 @@ test("isValidMove", t => {
                 isValidMove(gameState, proposedMoveNotFromBar),
                 false,
                 "the move is not valid when player 1 has a piece on the bar but does not move it"
-            ); 
+            );
+            
+            gameState.playerOne.barPieces = 0;
+            gameState.playerOne.initialPieces = 15;
+                
+            t.equal(
+              isValidMove(gameState, proposedMoveFromBar),
+              false,
+              "the move is not valid when player 1 has no bar piece"  
+            );
         });
         
         t.test("player 2", t => {
-            t.plan(2);
+            t.plan(3);
             
             const gameState = getInitialGameState();
             gameState.isPlayerOne = false;
@@ -344,6 +353,15 @@ test("isValidMove", t => {
                 false,
                 "the move is not valid when player 2 has a piece on the bar but does not move it"
             );  
+            
+            gameState.playerTwo.barPieces = 0;
+            gameState.playerTwo.initialPieces = 15;
+                
+            t.equal(
+              isValidMove(gameState, proposedMoveFromBar),
+              false,
+              "the move is not valid when player 2 has no bar piece"  
+            );
         });  
 
     });
