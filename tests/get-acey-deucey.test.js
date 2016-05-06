@@ -27,7 +27,7 @@ test("get acey deucey", t => {
             getAceyDeucey(aceyDeuceyRoll);
             t.fail("getAceyDeucey should have thrown an error for an acey deucey roll without doubles");
         } catch (error) {
-            t.equal(error.diceRoll, aceyDeuceyRoll, "error.diceRoll is the same as diceRoll");
+            t.deepEqual(error.diceRoll, aceyDeuceyRoll, "error.diceRoll is the same as diceRoll");
         }
     });
     
