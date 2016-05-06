@@ -4,7 +4,7 @@ const test = require("tape");
 const aceyDeuceyGameEngine = require("../");
 const getAceyDeucey = aceyDeuceyGameEngine.getAceyDeucey;
 
-test.only("get acey deucey", t => {
+test("get acey deucey", t => {
     t.test("two dice", t => {
         t.plan(4);
         
