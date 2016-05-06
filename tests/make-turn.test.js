@@ -83,9 +83,9 @@ test("make turn", t => {
            makeTurn(gameState, diceRoll, invalidTurn);
            t.fail("makeTurn should have thrown an error for an invalid turn");
        } catch (error) {
-           t.equal(error.proposedMoves, invalidTurn, "error.proposedMove is the same as the invalid move");
-           t.equal(error.gameState, gameState, "error.gameState is the same as the gameState");
-           t.equal(error.diceRoll, diceRoll, "error.diceRoll is the same as the diceRoll");
+           t.deepEqual(error.proposedMoves, invalidTurn, "error.proposedMoves is the same as the invalid move");
+           t.deepEqual(error.gameState, gameState, "error.gameState is the same as the gameState");
+           t.deepEqual(error.diceRoll, diceRoll, "error.diceRoll is the same as the diceRoll");
        }
         
     });
