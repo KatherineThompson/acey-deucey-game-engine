@@ -5,8 +5,949 @@ const aceyDeuceyGameEngine = require("../");
 const getInitialGameState = aceyDeuceyGameEngine.getInitialGameState;
 
 const isValidTurn = aceyDeuceyGameEngine.isValidTurn;
+// {currentPosition: , numberOfSpaces: , isBar: }
+        // t.test("", t => {
+        //     t.test("player 1", t => {
+                
+        //     });
+        //     t.test("player 2", t => {
+                
+        //     });
+        // });
+
 
 test.only("isValidTurn", t => {
+    t.test("proposed moves are each valid moves", t => {
+        t.test("proposed moves are valid", t => {
+            t.test("player 1", t => {
+                t.plan(1);
+                const diceRoll = [5, 1];
+                
+                const proposedMoves = [
+                    {currentPosition: 3, numberOfSpaces: diceRoll[1], isBar: false},
+                    {currentPosition: 8, numberOfSpaces: diceRoll[0], isBar: false}
+                ];
+                
+                const gameState = getInitialGameState();
+                gameState.board[proposedMoves[0].currentPosition].isPlayerOne = true;
+                gameState.board[proposedMoves[0].currentPosition].numPieces = 1;
+                gameState.board[proposedMoves[1].currentPosition].isPlayerOne = true;
+                gameState.board[proposedMoves[1].currentPosition].numPieces = 1;
+                
+                t.equal(
+                    isValidTurn(gameState, diceRoll, proposedMoves),
+                    true,
+                    "the turn is valid when player 1 make 2 moves that are each valid on a normal roll"
+                );
+            });
+            t.test("player 2", t => {
+                t.plan(1);
+                const diceRoll = [5, 1];
+                
+                const proposedMoves = [
+                    {currentPosition: 13, numberOfSpaces: diceRoll[1], isBar: false},
+                    {currentPosition: 18, numberOfSpaces: diceRoll[0], isBar: false}
+                ];
+                
+                const gameState = getInitialGameState();
+                gameState.isPlayerOne = false;
+                gameState.board[proposedMoves[0].currentPosition].isPlayerOne = false;
+                gameState.board[proposedMoves[0].currentPosition].numPieces = 1;
+                gameState.board[proposedMoves[1].currentPosition].isPlayerOne = false;
+                gameState.board[proposedMoves[1].currentPosition].numPieces = 1;
+                
+                t.equal(
+                    isValidTurn(gameState, diceRoll, proposedMoves),
+                    true,
+                    "the turn is valid when player 2 make 2 moves that are each valid on a normal roll"
+                );
+            });
+        });
+        t.test("proposed moves are invalid", t => {
+            t.test("player 1", t => {
+                t.plan(1);
+                const diceRoll = [5, 1];
+                const gameState = getInitialGameState();
+                
+                const proposedMoves = [
+                    {currentPosition: 3, numberOfSpaces: diceRoll[1], isBar: false},
+                    {currentPosition: 8, numberOfSpaces: diceRoll[0], isBar: false}
+                ];  
+                              
+                t.equal(
+                    isValidTurn(gameState, diceRoll, proposedMoves),
+                    false,
+                    "the turn is valid when player 1 make 2 moves that are not each valid on a normal roll"
+                );
+            });
+            t.test("player 2", t => {
+                t.plan(1);
+                const diceRoll = [5, 1];
+                
+                const proposedMoves = [
+                    {currentPosition: 13, numberOfSpaces: diceRoll[1], isBar: false},
+                    {currentPosition: 18, numberOfSpaces: diceRoll[0], isBar: false}
+                ];          
+                
+                const gameState = getInitialGameState();
+                gameState.isPlayerOne = false;
+                gameState.board[proposedMoves[0].currentPosition].isPlayerOne = true;
+                gameState.board[proposedMoves[0].currentPosition].numPieces = 1;
+                gameState.board[proposedMoves[1].currentPosition].isPlayerOne = true;
+                gameState.board[proposedMoves[1].currentPosition].numPieces = 1;
+                                      
+                t.equal(
+                    isValidTurn(gameState, diceRoll, proposedMoves),
+                    false,
+                    "the turn is invalid when player 2 make 2 moves that are not each valid on a normal roll"
+                );
+                
+            });
+        });
+    });
+    
+    t.test("proposed moves match dice", t => {
+        t.test("dice are invalid", t => {
+            t.test("dice have the wrong value", t => {
+                t.plan(1);
+                const diceRoll = [-1, 12];
+                
+                const proposedMoves = [
+                    {currentPosition: 3, numberOfSpaces: diceRoll[0], isBar: false},
+                    {currentPosition: 6, numberOfSpaces: diceRoll[1], isBar: false}
+                ];
+                
+                const gameState = getInitialGameState();
+                gameState.board[proposedMoves[0].currentPosition].isPlayerOne = true;
+                gameState.board[proposedMoves[0].currentPosition].numPieces = 1;
+                gameState.board[proposedMoves[1].currentPosition].isPlayerOne = true;
+                gameState.board[proposedMoves[1].currentPosition].numPieces = 1;
+                
+                t.equal(
+                    isValidTurn(gameState, diceRoll, proposedMoves),
+                    false,
+                    "the turn is not valid when the dice values are not within the range 1-6"
+                );
+                
+            });            
+            t.test("too many dice", t => {
+                t.plan(1);
+                const diceRoll = [2, 3, 4, 5];
+                
+                const proposedMoves = [
+                    {currentPosition: 3, numberOfSpaces: diceRoll[0], isBar: false},
+                    {currentPosition: 6, numberOfSpaces: diceRoll[1], isBar: false},
+                    {currentPosition: 9, numberOfSpaces: diceRoll[2], isBar: false},
+                    {currentPosition: 12, numberOfSpaces: diceRoll[3], isBar: false}
+                ];
+                
+                const gameState = getInitialGameState();
+                gameState.board[proposedMoves[0].currentPosition].isPlayerOne = true;
+                gameState.board[proposedMoves[0].currentPosition].numPieces = 1;
+                gameState.board[proposedMoves[1].currentPosition].isPlayerOne = true;
+                gameState.board[proposedMoves[1].currentPosition].numPieces = 1;
+                gameState.board[proposedMoves[2].currentPosition].isPlayerOne = true;
+                gameState.board[proposedMoves[2].currentPosition].numPieces = 1;
+
+                t.equal(
+                    isValidTurn(gameState, diceRoll, proposedMoves),
+                    false,
+                    "the turn is not valid when there are too many dice"
+                );
+            });            
+            t.test("too few dice", t => {
+                t.plan(1);
+                const diceRoll = [6];
+                
+                const proposedMoves = [{currentPosition: 3, numberOfSpaces: diceRoll[0], isBar: false}];
+                
+                const gameState = getInitialGameState();
+                gameState.board[proposedMoves[0].currentPosition].isPlayerOne = true;
+                gameState.board[proposedMoves[0].currentPosition].numPieces = 1;
+                
+                t.equal(
+                    isValidTurn(gameState, diceRoll, proposedMoves),
+                    false,
+                    "the turn is not valid when there are too few dice"
+                );
+            });            
+        });
+        t.test("acey deucey rolls", t => {
+            t.test("three dice but not an acey deucey roll", t => {
+                t.test("player 1", t => {
+                    t.plan(1);
+                    const notAceyDeucey = [3, 2, 5];
+            
+                    const proposedAceyDeuceyMoves = [
+                        {currentPosition: 4, numberOfSpaces: notAceyDeucey[0], isBar: false},
+                        {currentPosition: 8, numberOfSpaces: notAceyDeucey[1], isBar: false},
+                        {currentPosition: 10, numberOfSpaces: notAceyDeucey[2], isBar: false},
+                        {currentPosition: 10, numberOfSpaces: notAceyDeucey[2], isBar: false},
+                        {currentPosition: 16, numberOfSpaces: notAceyDeucey[2], isBar: false},
+                        {currentPosition: 16, numberOfSpaces: notAceyDeucey[2], isBar: false},
+                    ];
+                    
+                    const gameState = getInitialGameState();
+                    gameState.board[proposedAceyDeuceyMoves[0].currentPosition].isPlayerOne = true;
+                    gameState.board[proposedAceyDeuceyMoves[0].currentPosition].numPieces = 1;
+                    gameState.board[proposedAceyDeuceyMoves[1].currentPosition].isPlayerOne = true;
+                    gameState.board[proposedAceyDeuceyMoves[1].currentPosition].numPieces = 1;
+                    gameState.board[proposedAceyDeuceyMoves[2].currentPosition].isPlayerOne = true;
+                    gameState.board[proposedAceyDeuceyMoves[2].currentPosition].numPieces = 1;
+                    
+                    t.equal(
+                        isValidTurn(gameState, notAceyDeucey, proposedAceyDeuceyMoves),
+                        false,
+                        "the turn is not valid when the dice roll is not an acey deucey"
+                    );
+                });
+                t.test("player 2", t => {
+                    t.plan(1);
+                    const notAceyDeucey = [3, 2, 5];
+            
+                    const proposedAceyDeuceyMoves = [
+                        {currentPosition: 18, numberOfSpaces: notAceyDeucey[0], isBar: false},
+                        {currentPosition: 21, numberOfSpaces: notAceyDeucey[1], isBar: false},
+                        {currentPosition: 19, numberOfSpaces: notAceyDeucey[2], isBar: false},
+                        {currentPosition: 19, numberOfSpaces: notAceyDeucey[2], isBar: false},
+                        {currentPosition: 13, numberOfSpaces: notAceyDeucey[2], isBar: false},
+                        {currentPosition: 13, numberOfSpaces: notAceyDeucey[2], isBar: false},
+                    ];
+                    
+                    const gameState = getInitialGameState();
+                    gameState.isPlayerOne = false;
+                    gameState.board[proposedAceyDeuceyMoves[0].currentPosition].isPlayerOne = false;
+                    gameState.board[proposedAceyDeuceyMoves[0].currentPosition].numPieces = 1;
+                    gameState.board[proposedAceyDeuceyMoves[1].currentPosition].isPlayerOne = false;
+                    gameState.board[proposedAceyDeuceyMoves[1].currentPosition].numPieces = 1;
+                    gameState.board[proposedAceyDeuceyMoves[2].currentPosition].isPlayerOne = false;
+                    gameState.board[proposedAceyDeuceyMoves[2].currentPosition].numPieces = 1;
+                    
+                    t.equal(
+                        isValidTurn(gameState, notAceyDeucey, proposedAceyDeuceyMoves),
+                        false,
+                        "the turn is not valid when the dice roll is not an acey deucey"
+                    );
+                });
+            });
+            t.test("no proposed moves", t => {
+                t.test("valid", t => {
+                    t.test("player 1", t => {
+                        t.plan(1);
+                        const aceyDeuceyRoll = [2, 1, 5];
+                        
+                        const proposedMoves = [];
+                        
+                        const gameState = getInitialGameState();
+                        gameState.playerOne.initialPieces = 0;
+                        gameState.board[6].isPlayerOne = true;
+                        gameState.board[6].numPieces = 1;
+                        gameState.board[7].isPlayerOne = false;
+                        gameState.board[7].numPieces = 2;
+                        gameState.board[8].isPlayerOne = false;
+                        gameState.board[8].numPieces = 2;
+
+                        
+                        t.equal(
+                            isValidTurn(gameState, aceyDeuceyRoll, proposedMoves),
+                            true,
+                            "the turn is valid when player 1 cannot move a 1 or 2"
+                        );                        
+                    });
+                    t.test("player 2", t => {
+                        t.plan(1);
+                        const aceyDeuceyRoll = [2, 1, 5];
+                        
+                        const proposedMoves = [];  
+                                              
+                        const gameState = getInitialGameState();
+                        gameState.isPlayerOne = false;
+                        gameState.playerTwo.initialPieces = 0;
+                        gameState.board[9].isPlayerOne = false;
+                        gameState.board[9].numPieces = 1;
+                        gameState.board[7].isPlayerOne = true;
+                        gameState.board[7].numPieces = 2;
+                        gameState.board[8].isPlayerOne = true;
+                        gameState.board[8].numPieces = 2;
+
+                        t.equal(
+                            isValidTurn(gameState, aceyDeuceyRoll, proposedMoves),
+                            true,
+                            "the turn is valid when player 2 cannot move a 1 or 2"
+                        );                        
+                }); 
+                t.test("invalid", t => {
+                    t.test("player 1", t => {
+                        t.plan(1);
+                        const aceyDeuceyRoll = [2, 1, 5];
+                        
+                        const proposedMoves = []; 
+                                               
+                        const gameState = getInitialGameState();
+                        gameState.playerOne.initialPieces = 0;
+                        gameState.board[6].isPlayerOne = true;
+                        gameState.board[6].numPieces = 1;
+                        gameState.board[7].isPlayerOne = false;
+                        gameState.board[7].numPieces = 2;
+                        
+                        t.equal(
+                            isValidTurn(gameState, aceyDeuceyRoll, proposedMoves),
+                            false,
+                            "the turn is invalid when player 1 can move a 1 or 2"
+                        );          
+                    });
+                   
+                    t.test("player 2", t => {
+                        t.plan(1);
+                        const aceyDeuceyRoll = [2, 1, 5];
+                        
+                        const proposedMoves = [];             
+                                   
+                        const gameState = getInitialGameState();
+                        gameState.isPlayerOne = false;
+                        gameState.playerTwo.initialPieces = 0;
+                        gameState.board[9].isPlayerOne = false;
+                        gameState.board[9].numPieces = 1;
+                        gameState.board[7].isPlayerOne = true;
+                        gameState.board[7].numPieces = 2;
+
+                        t.equal(
+                            isValidTurn(gameState, aceyDeuceyRoll, proposedMoves),
+                            false,
+                            "the turn is invalid when player 2 can move a 1 or 2"
+                        );        
+                    });
+                }); 
+            });
+            t.test("1 proposed move", t => {
+                t.test("number of spaces is not 1 or 2", t => {
+                    t.test("player 1", t => {
+                        t.plan(1);
+                        
+                        const aceyDeuceyRoll = [1, 2, 3];
+                        
+                        const proposedMoves = [{currentPosition: 11, numberOfSpaces: aceyDeuceyRoll[2], isBar: false}];
+                        
+                        const gameState = getInitialGameState();
+                        gameState.board[proposedMoves[0].currentPosition].isPlayerOne = true;
+                        gameState.board[proposedMoves[0].currentPosition].numPieces = 1;
+                        
+                        t.equal(
+                            isValidTurn(gameState, aceyDeuceyRoll, proposedMoves),
+                            false,
+                            "the turn is invalid when player 1 has 1 proposed move and it doesn't move 1 or 2 spaces"
+                        );
+                    });
+                    
+                    t.test("player 2", t => {
+                        t.plan(1);
+                        const aceyDeuceyRoll = [1, 2, 3];
+                        
+                        const proposedMoves = [{currentPosition: 11, numberOfSpaces: aceyDeuceyRoll[2], isBar: false}];
+                        
+                        const gameState = getInitialGameState();
+                        gameState.isPlayerOne = false;
+                        gameState.board[proposedMoves[0].currentPosition].isPlayerOne = false;
+                        gameState.board[proposedMoves[0].currentPosition].numPieces = 1;
+                        
+                        t.equal(
+                            isValidTurn(gameState, aceyDeuceyRoll, proposedMoves),
+                            false,
+                            "the turn is invalid when player 2 has 1 proposed move and it doesn't move 1 or 2 spaces"
+                        );
+                    });
+                });
+                               
+                t.test("number of spaces is 1 or 2", t => {
+                    t.test("valid", t => {
+                        t.test("player 1", t => {
+                            t.plan(1);
+                            const aceyDeuceyRoll = [1, 2, 3];
+                        
+                            const proposedMoves = [
+                                {currentPosition: 11, numberOfSpaces: aceyDeuceyRoll[0], isBar: false}
+                            ];
+                            
+                            const gameState = getInitialGameState();
+                            gameState.playerOne.initialPieces = 0;
+                            gameState.board[proposedMoves[0].currentPosition].isPlayerOne = true;
+                            gameState.board[proposedMoves[0].currentPosition].numPieces = 1;
+                            gameState.board[14].isPlayerOne = false;
+                            gameState.board[14].numPieces = 2;
+                            
+                            t.equal(
+                                isValidTurn(gameState, aceyDeuceyRoll, proposedMoves),
+                                true,
+                                "the turn is valid when player 1 has 1 proposed move, it moves" + 
+                                    " 1 or 2 spaces, and there are no more available spaces"
+                            );
+                        });
+                        
+                        t.test("player 2", t => {
+                            t.plan(1);
+                            const aceyDeuceyRoll = [1, 2, 3];
+                        
+                            const proposedMoves = [
+                                {currentPosition: 11, numberOfSpaces: aceyDeuceyRoll[1], isBar: false}
+                            ];
+                            
+                            const gameState = getInitialGameState();
+                            gameState.isPlayerOne = false;
+                            gameState.playerTwo.initialPieces = 0;
+                            gameState.board[proposedMoves[0].currentPosition].isPlayerOne = false;
+                            gameState.board[proposedMoves[0].currentPosition].numPieces = 1;
+                            gameState.board[8].isPlayerOne = true;
+                            gameState.board[8].numPieces = 2;
+                            
+                            t.equal(
+                                isValidTurn(gameState, aceyDeuceyRoll, proposedMoves),
+                                true,
+                                "the turn is valid when player 2 has 1 proposed move, it moves" + 
+                                    " 1 or 2 spaces, and there are no more available spaces"
+                            );
+                        });
+                    });
+                                   
+                    t.test("invalid", t => {
+                        t.test("player 1", t => {
+                            t.plan(1);
+                            const aceyDeuceyRoll = [1, 2, 3];
+                        
+                            const proposedMoves = [
+                                {currentPosition: 11, numberOfSpaces: aceyDeuceyRoll[0], isBar: false}
+                            ];
+                            
+                            const gameState = getInitialGameState();
+                            gameState.playerOne.initialPieces = 0;
+                            gameState.board[proposedMoves[0].currentPosition].isPlayerOne = true;
+                            gameState.board[proposedMoves[0].currentPosition].numPieces = 1;
+
+                            
+                            t.equal(
+                                isValidTurn(gameState, aceyDeuceyRoll, proposedMoves),
+                                false,
+                                "the turn is invalid when player 1 has 1 proposed move, it moves" + 
+                                    " 1 or 2 spaces, and there are still available spaces"
+                            );
+                            
+                        });
+                        
+                        t.test("player 2", t => {
+                            t.plan(1);
+                            const aceyDeuceyRoll = [1, 2, 3];
+                        
+                            const proposedMoves = [
+                                {currentPosition: 11, numberOfSpaces: aceyDeuceyRoll[1], isBar: false}
+                            ];
+                            
+                            const gameState = getInitialGameState();
+                            gameState.isPlayerOne = false;
+                            gameState.playerTwo.initialPieces = 0;
+                            gameState.board[proposedMoves[0].currentPosition].isPlayerOne = false;
+                            gameState.board[proposedMoves[0].currentPosition].numPieces = 1;
+
+                            
+                            t.equal(
+                                isValidTurn(gameState, aceyDeuceyRoll, proposedMoves),
+                                false,
+                                "the turn is invalid when player 2 has 1 proposed move, it moves" + 
+                                    " 1 or 2 spaces, and there are still available spaces"
+                            );
+                            
+                        });
+                    });               
+                });               
+            });
+            t.test("2 proposed moves", t => {
+                t.test("only 1 or 2", t => {
+                    t.test("player 1", t => {
+                        t.plan(1);
+                        const aceyDeuceyRoll = [2, 1, 4];
+                        
+                        const proposedMoves = [
+                            {currentPosition: 18, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
+                            {currentPosition: 16, numberOfSpaces: aceyDeuceyRoll[0], isBar: false}
+                        ];
+                        
+                        const gameState = getInitialGameState();
+                        gameState.playerOne.initialPieces = 0;
+                        gameState.board[proposedMoves[0].currentPosition].isPlayerOne = true;
+                        gameState.board[proposedMoves[0].currentPosition].numPieces = 1;
+                        gameState.board[proposedMoves[1].currentPosition].isPlayerOne = true;
+                        gameState.board[proposedMoves[1].currentPosition].numPieces = 1;
+                        gameState.board[23].isPlayerOne = false;
+                        gameState.board[23].numPieces = 2;
+                        gameState.board[19].isPlayerOne = false;
+                        gameState.board[19].numPieces = 2;
+                        
+                        t.equal(
+                            isValidTurn(gameState, aceyDeuceyRoll, proposedMoves),
+                            false,
+                            "the turn is invalid when player 1 has 2 proposed moves and they do not have a 1 and 2"
+                        );
+                    });
+                    t.test("player 2", t => {
+                        t.plan(1);
+                        const aceyDeuceyRoll = [2, 1, 4];
+                        
+                        const proposedMoves = [
+                            {currentPosition: 18, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
+                            {currentPosition: 16, numberOfSpaces: aceyDeuceyRoll[0], isBar: false}
+                        ];
+                        
+                        const gameState = getInitialGameState();
+                        gameState.isPlayerOne = false;
+                        gameState.playerTwo.initialPieces = 0;
+                        gameState.board[proposedMoves[0].currentPosition].isPlayerOne = false;
+                        gameState.board[proposedMoves[0].currentPosition].numPieces = 1;
+                        gameState.board[proposedMoves[1].currentPosition].isPlayerOne = false;
+                        gameState.board[proposedMoves[1].currentPosition].numPieces = 1;
+                        gameState.board[13].isPlayerOne = true;
+                        gameState.board[13].numPieces = 2;
+                        
+                        t.equal(
+                            isValidTurn(gameState, aceyDeuceyRoll, proposedMoves),
+                            false,
+                            "the turn is invalid when player 2 has 2 proposed moves and they do not have a 1 and 2"
+                        );
+                    });
+                });
+                t.test("1 and 1", t => {
+                    t.test("moving off board", t => {
+                        t.test("player 1", t => {
+                            t.plan(1);
+                            const aceyDeuceyRoll = [2, 1, 4];
+                            
+                            const proposedMoves = [
+                                {currentPosition: 23, numberOfSpaces: aceyDeuceyRoll[1], isBar: false},
+                                {currentPosition: 23, numberOfSpaces: aceyDeuceyRoll[1], isBar: false}
+                            ];
+                            
+                            const gameState = getInitialGameState();
+                            gameState.playerOne.initialPieces = 0;
+                            gameState.board[proposedMoves[0].currentPosition].isPlayerOne = true;
+                            gameState.board[proposedMoves[0].currentPosition].numPieces = 2;
+
+                            
+                            t.equal(
+                                isValidTurn(gameState, aceyDeuceyRoll, proposedMoves),
+                                true,
+                                "the turn is valid when player 1 has 2 proposed moves that are moving off the board" + 
+                                    " and they have a 1 and 1"
+                            );
+                            
+                        });
+                        t.test("player 2", t => {
+                            t.plan(1);
+                            const aceyDeuceyRoll = [2, 1, 4];
+                            
+                            const proposedMoves = [
+                                {currentPosition: 0, numberOfSpaces: aceyDeuceyRoll[1], isBar: false},
+                                {currentPosition: 0, numberOfSpaces: aceyDeuceyRoll[1], isBar: false}
+                            ];
+                            
+                            const gameState = getInitialGameState();
+                            gameState.isPlayerOne = false;
+                            gameState.playerTwo.initialPieces = 0;
+                            gameState.board[proposedMoves[0].currentPosition].isPlayerOne = false;
+                            gameState.board[proposedMoves[0].currentPosition].numPieces = 2;
+                            
+                            t.equal(
+                                isValidTurn(gameState, aceyDeuceyRoll, proposedMoves),
+                                true,
+                                "the turn is valid when player 2 has 2 proposed moves that are moving off the board" + 
+                                    " and they have a 1 and 1"
+                            );
+                        });
+                    });
+                    
+                    t.test("not moving off board", t => {
+                        t.test("player 1", t => {
+                            t.plan(1);
+                            const aceyDeuceyRoll = [2, 1, 4];
+                            
+                            const proposedMoves = [
+                                {currentPosition: 2, numberOfSpaces: aceyDeuceyRoll[1], isBar: false},
+                                {currentPosition: 3, numberOfSpaces: aceyDeuceyRoll[1], isBar: false}
+                            ];
+                            
+                            const gameState = getInitialGameState();
+                            gameState.playerOne.initialPieces = 0;
+                            gameState.board[proposedMoves[0].currentPosition].isPlayerOne = true;
+                            gameState.board[proposedMoves[0].currentPosition].numPieces = 1;
+                            gameState.board[proposedMoves[1].currentPosition].isPlayerOne = true;
+                            gameState.board[proposedMoves[1].currentPosition].numPieces = 1;
+                            gameState.board[7].isPlayerOne = false;
+                            gameState.board[7].numPieces = 2;
+                            gameState.board[8].isPlayerOne = false;
+                            gameState.board[8].numPieces = 2;
+
+                            t.equal(
+                                isValidTurn(gameState, aceyDeuceyRoll, proposedMoves),
+                                false,
+                                "the turn is valid when player 1 has 2 proposed moves that are not moving off the" + 
+                                    " board and they have a 1 and 1"
+                            );
+                        });
+                        t.test("player 2", t => {
+                            t.plan(1);
+                            const aceyDeuceyRoll = [2, 1, 4];
+                            
+                            const proposedMoves = [
+                                {currentPosition: 16, numberOfSpaces: aceyDeuceyRoll[1], isBar: false},
+                                {currentPosition: 17, numberOfSpaces: aceyDeuceyRoll[1], isBar: false}
+                            ];
+                            
+                            const gameState = getInitialGameState();
+                            gameState.isPlayerOne = false;
+                            gameState.playerTwo.initialPieces = 0;
+                            gameState.board[proposedMoves[0].currentPosition].isPlayerOne = false;
+                            gameState.board[proposedMoves[0].currentPosition].numPieces = 1;
+                            gameState.board[proposedMoves[1].currentPosition].isPlayerOne = false;
+                            gameState.board[proposedMoves[1].currentPosition].numPieces = 1;
+                            gameState.board[11].isPlayerOne = false;
+                            gameState.board[11].numPieces = 2;
+                            gameState.board[12].isPlayerOne = false;
+                            gameState.board[12].numPieces = 2;
+
+                            t.equal(
+                                isValidTurn(gameState, aceyDeuceyRoll, proposedMoves),
+                                false,
+                                "the turn is valid when player 2 has 2 proposed moves that are not moving off the" + 
+                                    " board and they have a 1 and 1"
+                            );
+                        });
+                    });
+                });
+                t.test("1 and 2", t => {
+                    t.test("valid", t => {
+                        t.test("player 1", t => {
+                            t.plan(1);
+                            const aceyDeuceyRoll = [1, 2, 4];
+                            
+                            const proposedMoves = [
+                                {currentPosition: 16, numberOfSpaces: aceyDeuceyRoll[0], isBar: false},
+                                {currentPosition: 16, numberOfSpaces: aceyDeuceyRoll[1], isBar: false}
+                            ];
+                            
+                            const gameState = getInitialGameState();
+                            gameState.playerOne.initialPieces = 0;
+                            gameState.board[proposedMoves[0].currentPosition].isPlayerOne = true;
+                            gameState.board[proposedMoves[0].currentPosition].numPieces = 2;
+                            gameState.board[21].isPlayerOne = false;
+                            gameState.board[21].numPieces = 2;
+                            gameState.board[22].isPlayerOne = false;
+                            gameState.board[22].numPieces = 2;
+                            
+                            t.equal(
+                                isValidTurn(gameState, aceyDeuceyRoll, proposedMoves),
+                                true,
+                                "the turn is valid when player 1 has 2 moves with a 1 and 2 and there are no" +
+                                    " available spaces"
+                            );
+                        });
+                        t.test("player 2", t => {
+                            t.plan(1);
+                            const aceyDeuceyRoll = [1, 2, 4];
+                            
+                            const proposedMoves = [
+                                {currentPosition: 16, numberOfSpaces: aceyDeuceyRoll[0], isBar: false},
+                                {currentPosition: 16, numberOfSpaces: aceyDeuceyRoll[1], isBar: false}
+                            ];
+                            
+                            const gameState = getInitialGameState();
+                            gameState.isPlayerOne = false;
+                            gameState.playerTwo.initialPieces = 0;
+                            gameState.board[proposedMoves[0].currentPosition].isPlayerOne = false;
+                            gameState.board[proposedMoves[0].currentPosition].numPieces = 2;
+                            gameState.board[11].isPlayerOne = true;
+                            gameState.board[11].numPieces = 2;
+                            gameState.board[10].isPlayerOne = true;
+                            gameState.board[10].numPieces = 2;
+                            
+                            t.equal(
+                                isValidTurn(gameState, aceyDeuceyRoll, proposedMoves),
+                                true,
+                                "the turn is valid when player 2 has 2 moves with a 1 and 2 and there are no" +
+                                    " available spaces"
+                            );
+                        });
+                    });
+                    
+                    t.test("invalid", t => {
+                        t.test("player 1", t => {
+                            t.plan(1);
+                            const aceyDeuceyRoll = [1, 2, 4];
+                            
+                            const proposedMoves = [
+                                {currentPosition: 16, numberOfSpaces: aceyDeuceyRoll[0], isBar: false},
+                                {currentPosition: 16, numberOfSpaces: aceyDeuceyRoll[1], isBar: false}
+                            ];
+                            
+                            const gameState = getInitialGameState();
+                            gameState.playerOne.initialPieces = 0;
+                            gameState.board[proposedMoves[0].currentPosition].isPlayerOne = true;
+                            gameState.board[proposedMoves[0].currentPosition].numPieces = 2;
+                            gameState.board[21].isPlayerOne = false;
+                            gameState.board[21].numPieces = 2;
+
+                            t.equal(
+                                isValidTurn(gameState, aceyDeuceyRoll, proposedMoves),
+                                false,
+                                "the turn is valid when player 1 has 2 moves with a 1 and 2 and there are still" +
+                                    " available spaces"
+                            );
+                        });
+                        t.test("player 2", t => {
+                            t.plan(1);
+                            const aceyDeuceyRoll = [1, 2, 4];
+                            
+                            const proposedMoves = [
+                                {currentPosition: 16, numberOfSpaces: aceyDeuceyRoll[0], isBar: false},
+                                {currentPosition: 16, numberOfSpaces: aceyDeuceyRoll[1], isBar: false}
+                            ];
+                            
+                            const gameState = getInitialGameState();
+                            gameState.isPlayerOne = false;
+                            gameState.playerTwo.initialPieces = 0;
+                            gameState.board[proposedMoves[0].currentPosition].isPlayerOne = false;
+                            gameState.board[proposedMoves[0].currentPosition].numPieces = 2;
+                            gameState.board[11].isPlayerOne = true;
+                            gameState.board[11].numPieces = 2;
+                            
+                            t.equal(
+                                isValidTurn(gameState, aceyDeuceyRoll, proposedMoves),
+                                false,
+                                "the turn is valid when player 2 has 2 moves with a 1 and 2 and there are still" +
+                                    " available spaces"
+                            );
+                        });
+                    });
+                });
+            });
+            t.test("3-5 proposed moves", t => {
+                t.test("valid", t => {
+                    // no spaces
+                    // no spaces and don't match - winning
+                });    
+                t.test("invalid", t => {
+                    // available spaces - below
+                    // dice don't match - not winning - below
+                    // 1 2 not first - below
+                });    
+            });
+            t.test("6 proposed moves", t => {
+                t.test("valid acey deucey", t => {
+                    t.test("player 1", t => {
+                        t.plan(1);
+                        const aceyDeuceyRoll = [1, 2, 6];
+
+                        const proposedAceyDeuceyMoves = [
+                            {currentPosition: 4, numberOfSpaces: aceyDeuceyRoll[0], isBar: false},
+                            {currentPosition: 8, numberOfSpaces: aceyDeuceyRoll[1], isBar: false},
+                            {currentPosition: 10, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
+                            {currentPosition: 10, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
+                            {currentPosition: 16, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
+                            {currentPosition: 16, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
+                        ];
+                        
+                        const gameState = getInitialGameState();
+                        gameState.board[proposedAceyDeuceyMoves[0].currentPosition].isPlayerOne = true;
+                        gameState.board[proposedAceyDeuceyMoves[0].currentPosition].numPieces = 1;
+                        gameState.board[proposedAceyDeuceyMoves[1].currentPosition].isPlayerOne = true;
+                        gameState.board[proposedAceyDeuceyMoves[1].currentPosition].numPieces = 1;
+                        gameState.board[proposedAceyDeuceyMoves[2].currentPosition].isPlayerOne = true;
+                        gameState.board[proposedAceyDeuceyMoves[2].currentPosition].numPieces = 1;
+                        
+                        t.equal(
+                            isValidTurn(gameState, aceyDeuceyRoll, proposedAceyDeuceyMoves),
+                            true,
+                            "the turn is valid when player 1 moves a one, a two, and four of another number"
+                        );
+                    });
+                    t.test("player 2", t => {
+                        t.plan(1);
+                        const aceyDeuceyRoll = [1, 2, 6];
+                        
+                        const proposedAceyDeuceyMoves = [
+                            {currentPosition: 18, numberOfSpaces: aceyDeuceyRoll[0], isBar: false},
+                            {currentPosition: 21, numberOfSpaces: aceyDeuceyRoll[1], isBar: false},
+                            {currentPosition: 19, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
+                            {currentPosition: 19, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
+                            {currentPosition: 13, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
+                            {currentPosition: 13, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
+                        ];
+                        
+                        const gameState = getInitialGameState();
+                        gameState.isPlayerOne = false;
+                        gameState.board[proposedAceyDeuceyMoves[0].currentPosition].isPlayerOne = false;
+                        gameState.board[proposedAceyDeuceyMoves[0].currentPosition].numPieces = 1;
+                        gameState.board[proposedAceyDeuceyMoves[1].currentPosition].isPlayerOne = false;
+                        gameState.board[proposedAceyDeuceyMoves[1].currentPosition].numPieces = 1;
+                        gameState.board[proposedAceyDeuceyMoves[2].currentPosition].isPlayerOne = false;
+                        gameState.board[proposedAceyDeuceyMoves[2].currentPosition].numPieces = 1;
+                        
+                        t.equal(
+                            isValidTurn(gameState, aceyDeuceyRoll, proposedAceyDeuceyMoves),
+                            true,
+                            "the turn is valid when player 2 moves a one, a two, and four of another number"
+                        );                    
+                    });
+                });
+                // dice don't match - winning
+                // t.test("invalid", t => {
+                    // 1 2 not first
+                    // dice don't match - not winning
+                // });
+            });
+            // t.test("6+ proposed moves", t => {
+                // too many rolls
+            // });
+        });
+    });
+});
+    
+    t.test("acey deucey", t => {
+        t.test("player 1", t => {
+            t.plan(3);
+            
+            const aceyDeuceyRoll = [1, 2, 6];
+            
+            const proposedAceyDeuceyMoves = [
+                {currentPosition: 4, numberOfSpaces: aceyDeuceyRoll[0], isBar: false},
+                {currentPosition: 8, numberOfSpaces: aceyDeuceyRoll[1], isBar: false},
+                {currentPosition: 10, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
+                {currentPosition: 10, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
+                {currentPosition: 16, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
+                {currentPosition: 16, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
+            ];
+            
+            const gameState = getInitialGameState();
+            gameState.board[proposedAceyDeuceyMoves[0].currentPosition].isPlayerOne = true;
+            gameState.board[proposedAceyDeuceyMoves[0].currentPosition].numPieces = 1;
+            gameState.board[proposedAceyDeuceyMoves[1].currentPosition].isPlayerOne = true;
+            gameState.board[proposedAceyDeuceyMoves[1].currentPosition].numPieces = 1;
+            gameState.board[proposedAceyDeuceyMoves[2].currentPosition].isPlayerOne = true;
+            gameState.board[proposedAceyDeuceyMoves[2].currentPosition].numPieces = 1;
+            
+            
+            const notEnoughMoves = [
+                {currentPosition: 4, numberOfSpaces: aceyDeuceyRoll[0], isBar: false},
+                {currentPosition: 8, numberOfSpaces: aceyDeuceyRoll[1], isBar: false},
+                {currentPosition: 10, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
+                {currentPosition: 10, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
+                {currentPosition: 16, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
+            ];
+            
+             t.equal(
+                 isValidTurn(gameState, aceyDeuceyRoll, notEnoughMoves),
+                 false,
+                 "the turn is not valid when player 1 proposes only 5 moves"
+             );            
+
+            const notEnoughDoubles = [
+                {currentPosition: 4, numberOfSpaces: aceyDeuceyRoll[0], isBar: false},
+                {currentPosition: 8, numberOfSpaces: aceyDeuceyRoll[1], isBar: false},
+                {currentPosition: 10, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
+                {currentPosition: 10, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
+                {currentPosition: 16, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
+                {currentPosition: 16, numberOfSpaces: 2, isBar: false}
+            ];            
+            
+            t.equal(
+                isValidTurn(gameState, aceyDeuceyRoll, notEnoughDoubles),
+                false,
+                "the turn is not valid when player 1 does not have the correct number of spaces"
+            );
+            
+            const doublesFirstMove = [
+                {currentPosition: 10, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
+                {currentPosition: 4, numberOfSpaces: aceyDeuceyRoll[0], isBar: false},
+                {currentPosition: 8, numberOfSpaces: aceyDeuceyRoll[1], isBar: false},
+                {currentPosition: 10, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
+                {currentPosition: 16, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
+                {currentPosition: 16, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},                
+            ];
+            
+            t.equal(
+                isValidTurn(gameState, aceyDeuceyRoll, doublesFirstMove),
+                false,
+                "the turn is not valid when player 1 does not move the one and two first"
+            );
+        });
+        
+        t.test("player 2", t => {
+            t.plan(3);
+            
+            const aceyDeuceyRoll = [1, 2, 6];
+            
+            const proposedAceyDeuceyMoves = [
+                {currentPosition: 18, numberOfSpaces: aceyDeuceyRoll[0], isBar: false},
+                {currentPosition: 21, numberOfSpaces: aceyDeuceyRoll[1], isBar: false},
+                {currentPosition: 19, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
+                {currentPosition: 19, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
+                {currentPosition: 13, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
+                {currentPosition: 13, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
+            ];
+            
+            const gameState = getInitialGameState();
+            gameState.isPlayerOne = false;
+            gameState.board[proposedAceyDeuceyMoves[0].currentPosition].isPlayerOne = false;
+            gameState.board[proposedAceyDeuceyMoves[0].currentPosition].numPieces = 1;
+            gameState.board[proposedAceyDeuceyMoves[1].currentPosition].isPlayerOne = false;
+            gameState.board[proposedAceyDeuceyMoves[1].currentPosition].numPieces = 1;
+            gameState.board[proposedAceyDeuceyMoves[2].currentPosition].isPlayerOne = false;
+            gameState.board[proposedAceyDeuceyMoves[2].currentPosition].numPieces = 1;
+            
+            
+            const notEnoughMoves = [
+                {currentPosition: 18, numberOfSpaces: aceyDeuceyRoll[0], isBar: false},
+                {currentPosition: 23, numberOfSpaces: aceyDeuceyRoll[1], isBar: false},
+                {currentPosition: 19, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
+                {currentPosition: 19, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
+                {currentPosition: 13, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
+            ];
+            
+             t.equal(
+                 isValidTurn(gameState, aceyDeuceyRoll, notEnoughMoves),
+                 false,
+                 "the turn is not valid when player 2 proposes only 5 moves"
+             );            
+
+            const notEnoughDoubles = [
+                {currentPosition: 18, numberOfSpaces: aceyDeuceyRoll[0], isBar: false},
+                {currentPosition: 23, numberOfSpaces: aceyDeuceyRoll[1], isBar: false},
+                {currentPosition: 19, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
+                {currentPosition: 19, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
+                {currentPosition: 13, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
+                {currentPosition: 13, numberOfSpaces: 2, isBar: false}
+            ];            
+            
+            t.equal(
+                isValidTurn(gameState, aceyDeuceyRoll, notEnoughDoubles),
+                false,
+                "the turn is not valid when player 2 does not have the correct number of spaces"
+            );
+            
+            
+            const doublesFirstMove = [
+                {currentPosition: 19, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
+                {currentPosition: 18, numberOfSpaces: aceyDeuceyRoll[0], isBar: false},
+                {currentPosition: 21, numberOfSpaces: aceyDeuceyRoll[1], isBar: false},
+                {currentPosition: 19, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
+                {currentPosition: 13, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
+                {currentPosition: 13, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},                
+            ];
+            
+            t.equal(
+                isValidTurn(gameState, aceyDeuceyRoll, doublesFirstMove),
+                false,
+                "the turn is not valid when player 2 does not move the one and two first"
+            );
+                                    
+        });        
+    });
+    
     t.test("moving one piece", t => {
         t.test("player 1", t => {
             t.plan(5);
@@ -296,171 +1237,6 @@ test.only("isValidTurn", t => {
         });
     });
     
-    t.test("acey deucey", t => {
-        t.test("player 1", t => {
-            t.plan(5);
-            
-            const aceyDeuceyRoll = [1, 2, 6];
-            
-            const proposedAceyDeuceyMoves = [
-                {currentPosition: 4, numberOfSpaces: aceyDeuceyRoll[0], isBar: false},
-                {currentPosition: 8, numberOfSpaces: aceyDeuceyRoll[1], isBar: false},
-                {currentPosition: 10, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
-                {currentPosition: 10, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
-                {currentPosition: 16, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
-                {currentPosition: 16, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
-            ];
-            
-            const gameState = getInitialGameState();
-            gameState.board[proposedAceyDeuceyMoves[0].currentPosition].isPlayerOne = true;
-            gameState.board[proposedAceyDeuceyMoves[0].currentPosition].numPieces = 1;
-            gameState.board[proposedAceyDeuceyMoves[1].currentPosition].isPlayerOne = true;
-            gameState.board[proposedAceyDeuceyMoves[1].currentPosition].numPieces = 1;
-            gameState.board[proposedAceyDeuceyMoves[2].currentPosition].isPlayerOne = true;
-            gameState.board[proposedAceyDeuceyMoves[2].currentPosition].numPieces = 1;
-            
-            t.equal(
-                isValidTurn(gameState, aceyDeuceyRoll, proposedAceyDeuceyMoves),
-                true,
-                "the turn is valid when player 1 moves a one, a two, and four of another number"
-            );
-            
-            const notEnoughMoves = [
-                {currentPosition: 4, numberOfSpaces: aceyDeuceyRoll[0], isBar: false},
-                {currentPosition: 8, numberOfSpaces: aceyDeuceyRoll[1], isBar: false},
-                {currentPosition: 10, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
-                {currentPosition: 10, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
-                {currentPosition: 16, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
-            ];
-            
-             t.equal(
-                 isValidTurn(gameState, aceyDeuceyRoll, notEnoughMoves),
-                 false,
-                 "the turn is not valid when player 1 proposes only 5 moves"
-             );            
-
-            const notEnoughDoubles = [
-                {currentPosition: 4, numberOfSpaces: aceyDeuceyRoll[0], isBar: false},
-                {currentPosition: 8, numberOfSpaces: aceyDeuceyRoll[1], isBar: false},
-                {currentPosition: 10, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
-                {currentPosition: 10, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
-                {currentPosition: 16, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
-                {currentPosition: 16, numberOfSpaces: 2, isBar: false}
-            ];            
-            
-            t.equal(
-                isValidTurn(gameState, aceyDeuceyRoll, notEnoughDoubles),
-                false,
-                "the turn is not valid when player 1 does not have the correct number of spaces"
-            );
-            
-            const notAceyDeucey = [3, 2, 5];
-            
-            t.equal(
-                isValidTurn(gameState, notAceyDeucey, proposedAceyDeuceyMoves),
-                false,
-                "the turn is not valid when the dice roll is not an acey deucey"
-            );
-            
-            const doublesFirstMove = [
-                {currentPosition: 10, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
-                {currentPosition: 4, numberOfSpaces: aceyDeuceyRoll[0], isBar: false},
-                {currentPosition: 8, numberOfSpaces: aceyDeuceyRoll[1], isBar: false},
-                {currentPosition: 10, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
-                {currentPosition: 16, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
-                {currentPosition: 16, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},                
-            ];
-            
-            t.equal(
-                isValidTurn(gameState, aceyDeuceyRoll, doublesFirstMove),
-                false,
-                "the turn is not valid when player 1 does not move the one and two first"
-            );
-        });
-        
-        t.test("player 2", t => {
-            t.plan(5);
-            
-            const aceyDeuceyRoll = [1, 2, 6];
-            
-            const proposedAceyDeuceyMoves = [
-                {currentPosition: 18, numberOfSpaces: aceyDeuceyRoll[0], isBar: false},
-                {currentPosition: 21, numberOfSpaces: aceyDeuceyRoll[1], isBar: false},
-                {currentPosition: 19, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
-                {currentPosition: 19, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
-                {currentPosition: 13, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
-                {currentPosition: 13, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
-            ];
-            
-            const gameState = getInitialGameState();
-            gameState.isPlayerOne = false;
-            gameState.board[proposedAceyDeuceyMoves[0].currentPosition].isPlayerOne = false;
-            gameState.board[proposedAceyDeuceyMoves[0].currentPosition].numPieces = 1;
-            gameState.board[proposedAceyDeuceyMoves[1].currentPosition].isPlayerOne = false;
-            gameState.board[proposedAceyDeuceyMoves[1].currentPosition].numPieces = 1;
-            gameState.board[proposedAceyDeuceyMoves[2].currentPosition].isPlayerOne = false;
-            gameState.board[proposedAceyDeuceyMoves[2].currentPosition].numPieces = 1;
-            
-            t.equal(
-                isValidTurn(gameState, aceyDeuceyRoll, proposedAceyDeuceyMoves),
-                true,
-                "the turn is valid when player 2 moves a one, a two, and four of another number"
-            );
-            
-            const notEnoughMoves = [
-                {currentPosition: 18, numberOfSpaces: aceyDeuceyRoll[0], isBar: false},
-                {currentPosition: 23, numberOfSpaces: aceyDeuceyRoll[1], isBar: false},
-                {currentPosition: 19, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
-                {currentPosition: 19, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
-                {currentPosition: 13, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
-            ];
-            
-             t.equal(
-                 isValidTurn(gameState, aceyDeuceyRoll, notEnoughMoves),
-                 false,
-                 "the turn is not valid when player 2 proposes only 5 moves"
-             );            
-
-            const notEnoughDoubles = [
-                {currentPosition: 18, numberOfSpaces: aceyDeuceyRoll[0], isBar: false},
-                {currentPosition: 23, numberOfSpaces: aceyDeuceyRoll[1], isBar: false},
-                {currentPosition: 19, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
-                {currentPosition: 19, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
-                {currentPosition: 13, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
-                {currentPosition: 13, numberOfSpaces: 2, isBar: false}
-            ];            
-            
-            t.equal(
-                isValidTurn(gameState, aceyDeuceyRoll, notEnoughDoubles),
-                false,
-                "the turn is not valid when player 2 does not have the correct number of spaces"
-            );
-            
-            const notAceyDeucey = [3, 2, 5];
-            
-            t.equal(
-                isValidTurn(gameState, notAceyDeucey, proposedAceyDeuceyMoves),
-                false,
-                "the turn is not valid when the dice roll is not an acey deucey"
-            );
-            
-            const doublesFirstMove = [
-                {currentPosition: 19, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
-                {currentPosition: 18, numberOfSpaces: aceyDeuceyRoll[0], isBar: false},
-                {currentPosition: 21, numberOfSpaces: aceyDeuceyRoll[1], isBar: false},
-                {currentPosition: 19, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
-                {currentPosition: 13, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},
-                {currentPosition: 13, numberOfSpaces: aceyDeuceyRoll[2], isBar: false},                
-            ];
-            
-            t.equal(
-                isValidTurn(gameState, aceyDeuceyRoll, doublesFirstMove),
-                false,
-                "the turn is not valid when player 2 does not move the one and two first"
-            );
-                                    
-        });        
-    });
     
     t.test("not all rolls can be used", t => {
        t.test("player 1", t => {
