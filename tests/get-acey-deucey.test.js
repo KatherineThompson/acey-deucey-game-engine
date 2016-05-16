@@ -6,7 +6,7 @@ const getAceyDeucey = aceyDeuceyGameEngine.getAceyDeucey;
 
 test("get acey deucey", t => {
     t.test("two dice", t => {
-        t.plan(4);
+        t.plan(3);
         
         const aceyDeucey = {isAceyDeucey: false};
         const oneDiceRoll = [1, 6];
@@ -21,14 +21,6 @@ test("get acey deucey", t => {
             aceyDeucey,
             "returns the correct object when two dice do not contain a 1 or 2"
         );
-        const aceyDeuceyRoll = [1, 2];
-
-        try {
-            getAceyDeucey(aceyDeuceyRoll);
-            t.fail("getAceyDeucey should have thrown an error for an acey deucey roll without doubles");
-        } catch (error) {
-            t.deepEqual(error.diceRoll, aceyDeuceyRoll, "error.diceRoll is the same as diceRoll");
-        }
     });
     
     t.test("three dice", t => {
