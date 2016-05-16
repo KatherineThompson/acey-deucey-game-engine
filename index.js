@@ -11,5 +11,6 @@ module.exports = {
     findAvailableSpaces: require("./lib/find-available-spaces"),
     canMoveOffBoard: require("./lib/can-move-off-board"),
     canMoveToSpace: require("./lib/can-move-to-space"),
-    findPossibleMoves: require("./lib/find-possible-moves")
+    findPossibleMoves: require("./lib/find-possible-moves"),
+    constants: require("./lib/constants")
 };

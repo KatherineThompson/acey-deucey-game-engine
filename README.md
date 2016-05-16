@@ -108,6 +108,11 @@ proposed move is made.
 Returns a new `gameState` object that reflects the changes that have occurred when all 
 the proposed moves are made.
 
+##Properties
+
+###`aceyDeuceyGameEngine.constants`
+A collection of information about the game board including number of pieces, spaces, and special space indices.
+
 ##Examples
 Read the tests.
 
