@@ -7,7 +7,7 @@ const getInitialGameState = aceyDeuceyGameEngine.getInitialGameState;
 const isValidTurn = aceyDeuceyGameEngine.isValidTurn;
 
 test("isValidTurn", t => {
-    t.test("proposed moves are each valid moves", t => {
+    t.test("proposed moves are each valid", t => {
         t.test("proposed moves are valid", t => {
             t.test("player 1", t => {
                 t.plan(1);
